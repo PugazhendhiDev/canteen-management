@@ -1,0 +1,11 @@
+# Global ignores
+node_modules
+.env
+
+# Ignore client-specific
+client/node_modules/
+client/.env
+
+# Ignore server-specific
+server/node_modules/
+server/.env

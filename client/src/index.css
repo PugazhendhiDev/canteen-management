@@ -1,0 +1,33 @@
+* {
+  --background-color: #FFFAFA;
+  --border-color: #888;
+  --placeholder-color: #888;
+  --form-bg-btn-color: #000;
+  --form-btn-color: #fff;
+  --hover-color: #888;
+  --secondary-color: #888;
+  --loader-color: #fff;
+  --page-loader-color: #000;
+  --btn-border-color: #fff;
+  --page-bg-animation-color: #000;
+  --text-color: #000;
+}
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  background-color: var(--background-color);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
