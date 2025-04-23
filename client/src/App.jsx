@@ -30,8 +30,15 @@ function App() {
       if (currentUser) {
         await currentUser.reload();
         const updatedUser = auth.currentUser;
+
         if (updatedUser?.emailVerified) {
-          setUser(updatedUser);
+          if (!localStorage.getItem("email_verified")) {
+            await updatedUser.getIdToken(true);
+            localStorage.setItem("email_verified", true);
+            setUser(auth.currentUser);
+          } else {
+            setUser(updatedUser);
+          }
         } else {
           setUser(false);
         }

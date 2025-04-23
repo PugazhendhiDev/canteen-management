@@ -48,11 +48,16 @@ const authenticateToken = async (req, res, next) => {
       .auth()
       .verifyIdToken(idToken)
       .then((decodedToken) => {
+        if (!decodedToken.email_verified) {
+          return res.status(403).json({ message: "Email not verified" });
+        }
+
         req.uid = decodedToken.uid;
         req.email = decodedToken.email;
         next();
       })
       .catch((error) => {
+        console.error("Token verification error:", error);
         res.status(401).json({ message: "Unauthorized" });
       });
   } else {

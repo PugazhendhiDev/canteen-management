@@ -5,7 +5,6 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
-import axiosInstance from "../configuration/axios";
 import Logo from "../assets/logo.jpeg";
 import { ToastContainer, toast } from "react-toastify";
 import PulseLoader from "react-spinners/PulseLoader";
@@ -45,17 +44,15 @@ function Signup() {
 
         await sendEmailVerification(userCredential.user);
 
-        await axiosInstance.post("/api/add-user-details");
-
         setIsSubmit(false);
-
-        navigate("/email-sent", { replace: true });
 
         setValue({
           email: "",
           password: "",
           retypePassword: "",
         });
+
+        navigate("/email-sent", { replace: true });
       } catch (err) {
         toast.error(String(err.message));
         setIsSubmit(false);
