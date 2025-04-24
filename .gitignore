@@ -2,6 +2,10 @@
 node_modules
 .env
 
+# Ignore admin-specific
+admin/node_modules/
+admin/.env
+
 # Ignore client-specific
 client/node_modules/
 client/.env
