@@ -11,6 +11,11 @@ const AddUserDetails = require("./routes/userDetails/addUserDetails");
 const GetUserDetails = require("./routes/userDetails/getUserDetails");
 const UpdateUserDetails = require("./routes/userDetails/updateUserDetails");
 const GetBatchList = require("./routes/batchList/getBatchList");
+const AccountCreation = require("./routes/accountManagement/accountCreation");
+const FetchAccounts = require("./routes/accountManagement/fetchAccounts");
+const FetchSpecificAccount = require("./routes/accountManagement/fetchSpecificAccount");
+const UpdateAccount = require("./routes/accountManagement/updateAccount");
+const DeleteAccount = require("./routes/accountManagement/deleteAccount");
 
 dotenv.config();
 
@@ -28,7 +33,7 @@ admin.initializeApp({
 const app = express();
 
 const corsOptions = {
-  origin: process.env.FRONTEND_URL,
+  origin: [process.env.ADMIN_APP_URL, process.env.FRONTEND_URL],
   credentials: true,
 };
 
@@ -67,6 +72,13 @@ const authenticateToken = async (req, res, next) => {
 
 //auth
 app.get("/api/logout", authenticateToken, Logout());
+
+//Account Management (admin)
+app.post("/api/admin/create-account", authenticateToken, AccountCreation(admin, supabase));
+app.get("/api/admin/fetch-accounts", authenticateToken, FetchAccounts(supabase));
+app.get("/api/admin/fetch-specific-account/:uid", authenticateToken, FetchSpecificAccount(supabase));
+app.put("/api/admin/update-account", authenticateToken, UpdateAccount(admin, supabase));
+app.delete("/api/admin/delete-account", authenticateToken, DeleteAccount(admin, supabase));
 
 //user details
 app.get(
