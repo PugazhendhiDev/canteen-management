@@ -5,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
+import axiosInstance from "../configuration/axios";
 import Logo from "../assets/logo.jpeg";
 import { ToastContainer, toast } from "react-toastify";
 import PulseLoader from "react-spinners/PulseLoader";
@@ -42,7 +43,15 @@ function Signup() {
           value.password
         );
 
-        await sendEmailVerification(userCredential.user);
+        if (userCredential) {
+          const response = await axiosInstance.post("/api/admin/create-admin-account", {
+            email: userCredential.user.email,
+          });
+
+          if (response) {
+            await sendEmailVerification(userCredential.user);
+          }
+        }
 
         setIsSubmit(false);
 

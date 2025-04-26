@@ -16,6 +16,12 @@ const FetchAccounts = require("./routes/accountManagement/fetchAccounts");
 const FetchSpecificAccount = require("./routes/accountManagement/fetchSpecificAccount");
 const UpdateAccount = require("./routes/accountManagement/updateAccount");
 const DeleteAccount = require("./routes/accountManagement/deleteAccount");
+const AdminAccountCreation = require("./routes/adminAuth/adminAccountCreation");
+const AdminLogin = require("./routes/adminAuth/adminLogin");
+const CreateCatagory = require("./routes/food/catagory/createCatagory");
+const UpdateCatagory = require("./routes/food/catagory/updateCatagory");
+const DeleteCatagory = require("./routes/food/catagory/deleteCatagory");
+const FetchCatagories = require("./routes/food/catagory/fetchCatagories");
 
 dotenv.config();
 
@@ -33,7 +39,11 @@ admin.initializeApp({
 const app = express();
 
 const corsOptions = {
-  origin: [process.env.ADMIN_APP_URL, process.env.FRONTEND_URL],
+  origin: [
+    process.env.ADMIN_APP_URL,
+    process.env.FRONTEND_URL,
+    "http://192.168.21.152:5000",
+  ],
   credentials: true,
 };
 
@@ -70,15 +80,67 @@ const authenticateToken = async (req, res, next) => {
   }
 };
 
+const authenticateAdminToken = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    const idToken = authHeader.split("Bearer ")[1];
+    req.token = idToken;
+
+    admin
+      .auth()
+      .verifyIdToken(idToken)
+      .then((decodedToken) => {
+        req.uid = decodedToken.uid;
+        req.email = decodedToken.email;
+        next();
+      })
+      .catch((error) => {
+        console.error("Token verification error:", error);
+        res.status(401).json({ message: "Unauthorized" });
+      });
+  } else {
+    res.status(401).json({ message: "Unauthorized" });
+  }
+};
+
 //auth
 app.get("/api/logout", authenticateToken, Logout());
 
+//admin auth
+app.post(
+  "/api/admin/create-admin-account",
+  authenticateAdminToken,
+  AdminAccountCreation(admin, supabase)
+);
+app.post("/api/admin/login", authenticateToken, AdminLogin(supabase));
+
 //Account Management (admin)
-app.post("/api/admin/create-account", authenticateToken, AccountCreation(admin, supabase));
-app.get("/api/admin/fetch-accounts", authenticateToken, FetchAccounts(supabase));
-app.get("/api/admin/fetch-specific-account/:uid", authenticateToken, FetchSpecificAccount(supabase));
-app.put("/api/admin/update-account", authenticateToken, UpdateAccount(admin, supabase));
-app.delete("/api/admin/delete-account", authenticateToken, DeleteAccount(admin, supabase));
+app.post(
+  "/api/admin/create-account",
+  authenticateToken,
+  AccountCreation(admin, supabase)
+);
+app.get(
+  "/api/admin/fetch-accounts",
+  authenticateToken,
+  FetchAccounts(supabase)
+);
+app.get(
+  "/api/admin/fetch-specific-account/:uid",
+  authenticateToken,
+  FetchSpecificAccount(supabase)
+);
+app.put(
+  "/api/admin/update-account",
+  authenticateToken,
+  UpdateAccount(admin, supabase)
+);
+app.delete(
+  "/api/admin/delete-account",
+  authenticateToken,
+  DeleteAccount(admin, supabase)
+);
 
 //user details
 app.get(
@@ -98,6 +160,12 @@ app.put(
   authenticateToken,
   UpdateUserDetails(admin, supabase)
 );
+
+//food catagory
+app.get("/api/fetch-catagories", FetchCatagories(supabase));
+app.post("/api/admin/create-catagory", CreateCatagory(supabase));
+app.put("/api/admin/update-catagory", UpdateCatagory(supabase));
+app.delete("/api/admin/delete-catagory", DeleteCatagory(supabase));
 
 //batch list
 app.get("/api/get-batch-list", authenticateToken, GetBatchList(supabase));

@@ -50,15 +50,22 @@
   animation: bg 5s infinite ease-in-out;
 }
 
+.intro-admin-text {
+  animation: bg 5s infinite ease-in-out;
+}
+
 @keyframes bg {
   0% {
     background-color: var(--background-color);
+    color: var(--text-color);
   }
   50% {
     background-color: var(--page-bg-animation-color);
+    color: var(--secondary-text-color);
   }
   100% {
     background-color: var(--background-color);
+    color: var(--text-color);
   }
 }
 
@@ -85,13 +92,6 @@
 
 .gap-20 {
   gap: 20px;
-}
-
-.outline-text {
-  color: var(--text-color);
-  -webkit-text-stroke: 1px var(--outline-color);
-  text-shadow: -1px -1px 0 var(--outline-color), 1px -1px 0 var(--outline-color),
-    -1px 1px 0 var(--outline-color), 1px 1px 0 var(--outline-color);
 }
 
 .icon {

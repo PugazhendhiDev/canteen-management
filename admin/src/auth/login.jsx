@@ -6,6 +6,7 @@ import {
   signOut,
   sendEmailVerification,
 } from "firebase/auth";
+import axiosInstance from "../configuration/axios";
 import Logo from "../assets/logo.jpeg";
 import { ToastContainer, toast } from "react-toastify";
 import PulseLoader from "react-spinners/PulseLoader";
@@ -48,11 +49,30 @@ function Login() {
         });
         return;
       } else {
-        navigate("/", { replace: true });
+        if (user.emailVerified) {
+          try {
+            const response = await axiosInstance.post("/api/admin/login", {
+              email: user.email,
+            });
+
+            if (response) {
+              navigate("/", { replace: true });
+            }
+          } catch (err) {
+            await signOut(auth);
+            toast.error(String(err.response?.data?.message || err.message));
+            setIsSubmit(false);
+            setValue({
+              email: "",
+              password: "",
+            });
+          }
+        }
       }
 
       setIsSubmit(false);
     } catch (err) {
+      await signOut(auth);
       toast.error(String(err.message));
       setIsSubmit(false);
     }
