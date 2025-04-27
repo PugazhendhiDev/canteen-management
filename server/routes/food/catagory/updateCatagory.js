@@ -9,7 +9,7 @@ function UpdateCatagory(supabase) {
         .from("food_catagories")
         .update({
           ...(catagory &&
-            image_link && { catagory: catagory, image_link: image_link }),
+            image_link && { catagory, image_link }),
         })
         .eq("id", id)
         .select();

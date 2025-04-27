@@ -16,6 +16,9 @@ import SettingsPage from "./pages/settingsPage";
 import AccountCreation from "./pages/accountCreation";
 import AccountManagement from "./pages/accountManagement";
 import EditAccount from "./pages/editAccount";
+import ManageCatagory from "./pages/manageCatagory";
+import CreateCatagory from "./pages/createCatagory";
+import EditCatagory from "./pages/editCatagory";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -166,6 +169,37 @@ function App() {
         element={
           user && user.emailVerified ? (
             <EditAccount />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+
+      <Route
+        path="/catagory-management"
+        element={
+          user && user.emailVerified ? (
+            <ManageCatagory />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+      <Route
+        path="/create-catagory"
+        element={
+          user && user.emailVerified ? (
+            <CreateCatagory />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+      <Route
+        path="/edit-catagory/:id"
+        element={
+          user && user.emailVerified ? (
+            <EditCatagory />
           ) : (
             <Navigate to="/" replace />
           )

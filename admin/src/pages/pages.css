@@ -94,6 +94,14 @@
   gap: 20px;
 }
 
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+.margin-bottom-20 {
+  margin-bottom: 20px;
+}
+
 .icon {
   width: 30px;
   height: 30px;
@@ -158,7 +166,7 @@
   transform: scale(1.05);
 }
 
-.page-card-img {
+.page-card-img, img {
   width: 200px;
   height: 200px;
   border-radius: 20px;
@@ -226,7 +234,7 @@
     height: 300px;
   }
 
-  .page-card-img {
+  .page-card-img, img {
     width: 250px;
     height: 250px;
   }

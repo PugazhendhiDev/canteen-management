@@ -7,13 +7,11 @@ import axiosInstance from "../configuration/axios";
 import { ToastContainer, toast } from "react-toastify";
 import PulseLoader from "react-spinners/PulseLoader";
 
-function EditAccount() {
-  const uid = useParams();
+function EditCatagory() {
+  const id = useParams();
   const [value, setValue] = useState({
-    name: "",
-    email: "",
-    password: "",
-    retypePassword: "",
+    catagory: "",
+    image_link: "",
   });
   const [isSubmit, setIsSubmit] = useState(false);
   const navigate = useNavigate();
@@ -26,52 +24,42 @@ function EditAccount() {
     e.preventDefault();
     setIsSubmit(true);
 
-    if (value.password.length < 6) {
-      toast.error("Password must be at least 6 characters.");
-      setIsSubmit(false);
-      return;
-    } else if (value.password !== value.retypePassword) {
-      toast.error("Password don't match.");
-      setIsSubmit(false);
-      return;
-    } else {
-      try {
-        const response = await axiosInstance.put("/api/admin/update-account", {
-          name: value.name,
-          uid: uid.uid,
-          password: value.password,
-        });
+    try {
+      const response = await axiosInstance.put("/api/admin/update-catagory", {
+        id: id.id,
+        catagory: value.catagory,
+        image_link: value.image_link,
+      });
 
-        if (response) {
-          setIsSubmit(true);
-          navigate(-1);
-        } else {
-          setIsSubmit(false);
-          setValue({
-            password: "",
-            retypePassword: "",
-          });
-        }
-      } catch (err) {
-        toast.error(String(err.message));
+      if (response) {
+        setIsSubmit(true);
+        navigate(-1);
+      } else {
         setIsSubmit(false);
+        setValue({
+          password: "",
+          retypePassword: "",
+        });
       }
+    } catch (err) {
+      toast.error(String(err.message));
+      setIsSubmit(false);
     }
   };
 
   useEffect(() => {
-    async function fetchAccountDetails() {
+    async function fetchCatagory() {
       try {
         const response = await axiosInstance.get(
-          `/api/admin/fetch-specific-account/${uid.uid}`
+          `/api/admin/fetch-specific-catagory/${id.id}`
         );
         setValue(response.data.data);
       } catch (err) {
-        console.error("Error fetching account detail", err);
+        console.error("Error fetching catagory detail", err);
       }
     }
 
-    fetchAccountDetails();
+    fetchCatagory();
   }, []);
 
   return (
@@ -101,51 +89,31 @@ function EditAccount() {
               <div className="form-body">
                 <input
                   className="form-input"
-                  placeholder="Display name"
+                  placeholder="Catagory name"
                   type="text"
-                  name="text"
-                  value={value.name}
+                  name="catagory"
+                  value={value.catagory}
                   onChange={(e) =>
                     setValue({
                       ...value,
-                      name: e.target.value,
+                      catagory: e.target.value,
                     })
                   }
                   required
                 />
                 <input
                   className="form-input"
-                  placeholder="Enter your email"
-                  type="email"
-                  name="email"
-                  value={value.email}
+                  placeholder="Image link"
+                  type="text"
+                  name="image_link"
+                  value={value.image_link}
+                  onChange={(e) =>
+                    setValue({
+                      ...value,
+                      image_link: e.target.value,
+                    })
+                  }
                   required
-                />
-                <input
-                  className="form-input"
-                  placeholder="Enter your password"
-                  type="password"
-                  name="password"
-                  value={value.password}
-                  onChange={(e) =>
-                    setValue({
-                      ...value,
-                      password: e.target.value,
-                    })
-                  }
-                />
-                <input
-                  className="form-input"
-                  placeholder="Retype password"
-                  type="password"
-                  name="password"
-                  value={value.retypePassword}
-                  onChange={(e) =>
-                    setValue({
-                      ...value,
-                      retypePassword: e.target.value,
-                    })
-                  }
                 />
                 {isSubmit ? (
                   <button className="form-button" type="submit" disabled>
@@ -153,7 +121,7 @@ function EditAccount() {
                   </button>
                 ) : (
                   <button className="form-button" type="submit">
-                    Edit account
+                    Edit Catagory
                   </button>
                 )}
               </div>
@@ -170,4 +138,4 @@ function EditAccount() {
   );
 }
 
-export default EditAccount;
+export default EditCatagory;

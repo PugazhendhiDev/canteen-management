@@ -22,6 +22,11 @@ const CreateCatagory = require("./routes/food/catagory/createCatagory");
 const UpdateCatagory = require("./routes/food/catagory/updateCatagory");
 const DeleteCatagory = require("./routes/food/catagory/deleteCatagory");
 const FetchCatagories = require("./routes/food/catagory/fetchCatagories");
+const FetchSpecificCatagory = require("./routes/food/catagory/fetchSpecificCatagory");
+const CreateFood = require("./routes/food/foodList/createFood");
+const UpdateFood = require("./routes/food/foodList/updateFood");
+const DeleteFood = require("./routes/food/foodList/deleteFood");
+const FetchFoods = require("./routes/food/foodList/fetchFoods");
 
 dotenv.config();
 
@@ -163,9 +168,19 @@ app.put(
 
 //food catagory
 app.get("/api/fetch-catagories", FetchCatagories(supabase));
+app.get(
+  "/api/admin/fetch-specific-catagory/:id",
+  FetchSpecificCatagory(supabase)
+);
 app.post("/api/admin/create-catagory", CreateCatagory(supabase));
 app.put("/api/admin/update-catagory", UpdateCatagory(supabase));
 app.delete("/api/admin/delete-catagory", DeleteCatagory(supabase));
+
+//food list
+app.get("/api/fetch-foods", FetchFoods(supabase));
+app.post("/api/admin/create-food", CreateFood(supabase));
+app.put("/api/admin/update-food", UpdateFood(supabase));
+app.delete("/api/admin/delete-food", DeleteFood(supabase));
 
 //batch list
 app.get("/api/get-batch-list", authenticateToken, GetBatchList(supabase));

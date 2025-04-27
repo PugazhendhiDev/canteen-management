@@ -146,7 +146,7 @@ function AccountCreation() {
                 </button>
               ) : (
                 <button className="form-button" type="submit">
-                  Create user
+                  Create account
                 </button>
               )}
             </div>

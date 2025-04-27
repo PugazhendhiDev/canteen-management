@@ -38,6 +38,13 @@ function Home() {
               </div>
               <p>Account Management</p>
             </Link>
+
+            <Link className="page-card" to="/catagory-management">
+              <div className="page-card-img">
+                <AccountManagementIcon />
+              </div>
+              <p>Catagory Management</p>
+            </Link>
           </div>
         </div>
       </div>
