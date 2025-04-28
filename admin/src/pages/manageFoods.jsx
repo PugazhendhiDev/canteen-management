@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./pages.css";
 import { ToastContainer, toast } from "react-toastify";
 import axiosInstance from "../configuration/axios";
 import Logo from "../assets/logo.jpeg";
 import ProfileIcon from "../assets/icons/profileIcon";
 
-function FoodManagement() {
+function ManageFoods() {
   const [value, setValue] = useState([]);
 
-  const id = useParams();
-
   useEffect(() => {
-    async function fetchFoodItems() {
+    async function fetchCatagory() {
       try {
-        const response = await axiosInstance.get(`/api/fetch-foods/${id.id}`);
+        const response = await axiosInstance.get("/api/fetch-catagories");
 
         if (response) {
           setValue(
@@ -28,7 +26,7 @@ function FoodManagement() {
       }
     }
 
-    fetchFoodItems();
+    fetchCatagory();
   }, []);
 
   return (
@@ -50,19 +48,23 @@ function FoodManagement() {
       <div className="page-container">
         <div className="page-body">
           <h2>ADMIN</h2>
-          <Link className="link margin-bottom-20" to={`/create-food/${id.id}`}>
-            Create food
+          <Link className="link margin-bottom-20" to="/create-catagory">
+            Create catagory
           </Link>
-          <div className="page-card-container">
+          <div className="page-card-container margin-bottom-20">
             {value.map((value, index) => (
               <div className="page-card-wrapper">
-                <Link className="page-card" to="/food-details" key={index}>
+                <Link
+                  className="page-card"
+                  to={`/food-management/${value.id}`}
+                  key={index}
+                >
                   <img src={value.image_link} loading="lazy" />
-                  <p>{value.name}</p>
+                  <p>{value.catagory}</p>
                 </Link>
                 <Link
                   className="link margin-top-20"
-                  to={`/edit-food/${value.id}`}
+                  to={`/edit-catagory/${value.id}`}
                 >
                   Edit
                 </Link>
@@ -75,4 +77,4 @@ function FoodManagement() {
   );
 }
 
-export default FoodManagement;
+export default ManageFoods;

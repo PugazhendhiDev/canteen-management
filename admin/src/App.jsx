@@ -16,10 +16,10 @@ import SettingsPage from "./pages/settingsPage";
 import AccountCreation from "./pages/accountCreation";
 import AccountManagement from "./pages/accountManagement";
 import EditAccount from "./pages/editAccount";
-import ManageCatagory from "./pages/manageCatagory";
+import ManageFoods from "./pages/manageFoods";
 import CreateCatagory from "./pages/createCatagory";
 import EditCatagory from "./pages/editCatagory";
-import FoodManagement from "./pages/foodManagement";
+import ManageFoodItems from "./pages/manageFoodItems";
 import CreateFood from "./pages/createFood";
 import EditFood from "./pages/editFood";
 
@@ -182,7 +182,7 @@ function App() {
         path="/catagory-management"
         element={
           user && user.emailVerified ? (
-            <ManageCatagory />
+            <ManageFoods />
           ) : (
             <Navigate to="/" replace />
           )
@@ -212,7 +212,7 @@ function App() {
         path="/food-management/:id"
         element={
           user && user.emailVerified ? (
-            <FoodManagement />
+            <ManageFoodItems />
           ) : (
             <Navigate to="/" replace />
           )
