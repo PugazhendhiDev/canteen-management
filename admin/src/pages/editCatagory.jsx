@@ -6,6 +6,7 @@ import ProfileIcon from "../assets/icons/profileIcon";
 import axiosInstance from "../configuration/axios";
 import { ToastContainer, toast } from "react-toastify";
 import PulseLoader from "react-spinners/PulseLoader";
+import DeleteIcon from "../assets/icons/deleteIcon";
 
 function EditCatagory() {
   const id = useParams();
@@ -14,6 +15,7 @@ function EditCatagory() {
     image_link: "",
   });
   const [isSubmit, setIsSubmit] = useState(false);
+  const [deleted, setDeleted] = useState(false);
   const navigate = useNavigate();
 
   const loaderColor = getComputedStyle(document.documentElement)
@@ -61,6 +63,25 @@ function EditCatagory() {
 
     fetchCatagory();
   }, []);
+
+  async function handleDelete() {
+    setDeleted(true);
+    toast("Deleting...");
+    try {
+      const res = await axiosInstance.delete("/api/admin/delete-catagory", {
+        data: { id: id.id },
+      });
+
+      if (res) {
+        navigate(-1);
+      }
+
+      setDeleted(false);
+    } catch (err) {
+      setDeleted(false);
+      toast.error(err.response?.data?.error || "Something went wrong!");
+    }
+  }
 
   return (
     <div className="page-wrapper">
@@ -115,6 +136,16 @@ function EditCatagory() {
                   }
                   required
                 />
+                <div className="page-center">
+                  <div
+                    className="page-btn btn-20w-20h delete-btn"
+                    onClick={() => {
+                      if (!deleted) handleDelete();
+                    }}
+                  >
+                    <DeleteIcon />
+                  </div>
+                </div>
                 {isSubmit ? (
                   <button className="form-button" type="submit" disabled>
                     <PulseLoader size={5} color={loaderColor} />

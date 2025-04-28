@@ -90,6 +90,13 @@
   word-break: break-all;
 }
 
+.page-center {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
 .gap-20 {
   gap: 20px;
 }
