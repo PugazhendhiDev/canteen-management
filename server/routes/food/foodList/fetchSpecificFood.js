@@ -1,17 +1,20 @@
 const express = require("express");
 const router = express.Router();
 
-function FetchAccounts(supabase) {
-  router.get("/api/admin/fetch-accounts", async (req, res) => {
+function FetchSpecificFood(supabase) {
+  router.get("/api/admin/fetch-specific-food/:id", async (req, res) => {
+    const { id } = req.params;
     try {
       const { data, error } = await supabase
-        .from("shop_accounts")
-        .select("*");
+        .from("food_list")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
 
       if (error) return res.status(500).json({ error: error.message });
 
       res.status(200).json({
-        message: "Accounts fetched successfully",
+        message: "Food fetched successfully",
         data: data,
       });
     } catch (error) {
@@ -22,4 +25,4 @@ function FetchAccounts(supabase) {
   return router;
 }
 
-module.exports = FetchAccounts;
+module.exports = FetchSpecificFood;

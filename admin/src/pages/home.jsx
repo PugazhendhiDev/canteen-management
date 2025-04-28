@@ -5,6 +5,7 @@ import Logo from "../assets/logo.jpeg";
 import ProfileIcon from "../assets/icons/profileIcon";
 import AccountCreationIcon from "../assets/card/accountCreationIcon";
 import AccountManagementIcon from "../assets/card/accountManagementIcon";
+import CatagoryManagementIcon from "../assets/card/catagoryManagementIcon";
 
 function Home() {
   return (
@@ -41,7 +42,7 @@ function Home() {
 
             <Link className="page-card" to="/catagory-management">
               <div className="page-card-img">
-                <AccountManagementIcon />
+                <CatagoryManagementIcon />
               </div>
               <p>Catagory Management</p>
             </Link>

@@ -27,6 +27,7 @@ const CreateFood = require("./routes/food/foodList/createFood");
 const UpdateFood = require("./routes/food/foodList/updateFood");
 const DeleteFood = require("./routes/food/foodList/deleteFood");
 const FetchFoods = require("./routes/food/foodList/fetchFoods");
+const FetchSpecificFood = require("./routes/food/foodList/fetchSpecificFood");
 
 dotenv.config();
 
@@ -177,7 +178,8 @@ app.put("/api/admin/update-catagory", UpdateCatagory(supabase));
 app.delete("/api/admin/delete-catagory", DeleteCatagory(supabase));
 
 //food list
-app.get("/api/fetch-foods", FetchFoods(supabase));
+app.get("/api/fetch-foods/:id", FetchFoods(supabase));
+app.get("/api/admin/fetch-specific-food/:id", FetchSpecificFood(supabase));
 app.post("/api/admin/create-food", CreateFood(supabase));
 app.put("/api/admin/update-food", UpdateFood(supabase));
 app.delete("/api/admin/delete-food", DeleteFood(supabase));

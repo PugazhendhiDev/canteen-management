@@ -2,11 +2,13 @@ const express = require("express");
 const router = express.Router();
 
 function FetchFoods(supabase) {
-  router.get("/api/fetch-foods", async (req, res) => {
+  router.get("/api/fetch-foods/:id", async (req, res) => {
+    const { id } = req.params;
     try {
       const { data, error } = await supabase
         .from("food_list")
-        .select("*");
+        .select("*")
+        .eq("catagory_id", id);
 
       if (error) return res.status(500).json({ error: error.message });
 

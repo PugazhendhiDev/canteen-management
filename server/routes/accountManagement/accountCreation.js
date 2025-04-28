@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 function AccountCreation(admin, supabase) {
-  router.post("/api/admin/create-user", async (req, res) => {
+  router.post("/api/admin/create-account", async (req, res) => {
     const { email, password, displayName } = req.body;
 
     try {

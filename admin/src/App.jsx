@@ -19,6 +19,9 @@ import EditAccount from "./pages/editAccount";
 import ManageCatagory from "./pages/manageCatagory";
 import CreateCatagory from "./pages/createCatagory";
 import EditCatagory from "./pages/editCatagory";
+import FoodManagement from "./pages/foodManagement";
+import CreateFood from "./pages/createFood";
+import EditFood from "./pages/editFood";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -200,6 +203,36 @@ function App() {
         element={
           user && user.emailVerified ? (
             <EditCatagory />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+      <Route
+        path="/food-management/:id"
+        element={
+          user && user.emailVerified ? (
+            <FoodManagement />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+      <Route
+        path="/create-food/:id"
+        element={
+          user && user.emailVerified ? (
+            <CreateFood />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+      <Route
+        path="/edit-food/:id"
+        element={
+          user && user.emailVerified ? (
+            <EditFood />
           ) : (
             <Navigate to="/" replace />
           )

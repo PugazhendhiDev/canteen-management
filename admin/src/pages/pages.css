@@ -148,6 +148,13 @@
   gap: 20px;
 }
 
+.page-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .page-card {
   display: flex;
   flex-direction: column;
@@ -166,7 +173,8 @@
   transform: scale(1.05);
 }
 
-.page-card-img, img {
+.page-card-img,
+img {
   width: 200px;
   height: 200px;
   border-radius: 20px;
@@ -234,7 +242,8 @@
     height: 300px;
   }
 
-  .page-card-img, img {
+  .page-card-img,
+  img {
     width: 250px;
     height: 250px;
   }
