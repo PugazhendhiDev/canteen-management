@@ -55,7 +55,7 @@ function Login() {
               email: user.email,
             });
 
-            if (response) {
+            if (response.status === 200) {
               navigate("/", { replace: true });
             }
           } catch (err) {
