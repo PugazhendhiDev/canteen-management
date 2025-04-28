@@ -39,7 +39,7 @@ function FoodManagement() {
           <div className="page-app-logo">
             <img src={Logo} />
           </div>
-          <h2 className="page-app-title">{import.meta.env.VITE_APP_NAME}</h2>
+          <h1 className="page-app-title">{import.meta.env.VITE_APP_NAME}</h1>
         </div>
         <div className="page-app-profile">
           <Link to="/profile">
