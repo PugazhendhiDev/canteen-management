@@ -60,7 +60,11 @@ function ManageFoods() {
                   key={index}
                 >
                   <img src={value.image_link} loading="lazy" />
-                  <p>{value.catagory}</p>
+                  <p>
+                    {value.catagory.length > 20
+                      ? `${value.catagory.slice(0, 20)}...`
+                      : value.catagory}
+                  </p>
                 </Link>
                 <Link
                   className="link margin-top-20"

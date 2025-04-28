@@ -72,15 +72,15 @@ function AccountManagement() {
                 <div className="page-list-view-item" key={index}>
                   <h2>
                     {value.name && value.name.length > 10
-                      ? `${value.name.slice(
-                          0,
-                          5
-                        )}...${value.name.slice(-5)}`
+                      ? `${value.name.slice(0, 5)}...${value.name.slice(-5)}`
                       : value.name || "No name"}
                   </h2>
                   <p>{value.email}</p>
                   <div className="page-btn-container">
-                    <Link className="page-btn btn-20w-20h" to={`/edit-account/${value.uid}`}>
+                    <Link
+                      className="page-btn btn-20w-20h"
+                      to={`/edit-account/${value.uid}`}
+                    >
                       <EditIcon />
                     </Link>
                     <div

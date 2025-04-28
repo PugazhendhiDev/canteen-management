@@ -58,7 +58,11 @@ function ManageFoodItems() {
               <div className="page-card-wrapper">
                 <Link className="page-card" to="/food-details" key={index}>
                   <img src={value.image_link} loading="lazy" />
-                  <p>{value.name}</p>
+                  <p>
+                    {value.name.length > 20
+                      ? `${value.name.slice(0, 20)}...`
+                      : value.name}
+                  </p>
                 </Link>
                 <Link
                   className="link margin-top-20"
