@@ -22,7 +22,6 @@ function AdminLogin(supabase) {
       }
 
       if (data) {
-        console.log(data);
         return res.status(200).json({
           message: "Admin verified",
         });
