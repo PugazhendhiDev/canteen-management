@@ -59,6 +59,9 @@ function FoodDetails() {
           <div className="highlight-container">
             <div className="highlight-normal">Quantity: {value.quantity}</div>
             <div className="highlight-unique">Price: {value.rate}</div>
+            <Link className="highlight-normal" to={`/edit-food/${id.id}`}>
+              Edit
+            </Link>
           </div>
         </div>
       </div>
