@@ -22,6 +22,7 @@ import EditCatagory from "./pages/editCatagory";
 import ManageFoodItems from "./pages/manageFoodItems";
 import CreateFood from "./pages/createFood";
 import EditFood from "./pages/editFood";
+import FoodDetails from "./pages/foodDetails";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -213,6 +214,16 @@ function App() {
         element={
           user && user.emailVerified ? (
             <ManageFoodItems />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+      <Route
+        path="/food-details/:id"
+        element={
+          user && user.emailVerified ? (
+            <FoodDetails />
           ) : (
             <Navigate to="/" replace />
           )

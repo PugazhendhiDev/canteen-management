@@ -121,3 +121,49 @@
   text-decoration: none;
   color: var(--secondary-color);
 }
+
+.highlight-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.highlight-normal {
+  padding: 17px;
+  background-color: var(--form-bg-btn-color);
+  color: var(--form-btn-color);
+  border-radius: 10px;
+  border: none;
+  text-decoration: none;
+  text-align: center;
+  width: 200px;
+}
+
+.highlight-unique {
+  padding: 17px;
+  background-color: var(--primary-color);
+  color: var(--form-btn-color);
+  border-radius: 10px;
+  border: none;
+  text-decoration: none;
+  text-align: center;
+  width: 200px;
+}
+
+@media (max-width: 1024px) {
+  .highlight-container {
+    flex-direction: column;
+    width: 250px;
+  }
+
+  .highlight-normal {
+    width: 100%;
+  }
+
+  .highlight-unique {
+    width: 100%;
+  }
+}
