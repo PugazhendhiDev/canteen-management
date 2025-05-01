@@ -31,6 +31,7 @@ function CreateCatagory() {
 
       if (response) {
         setIsSubmit(true);
+        sessionStorage.removeItem("catagories");
         navigate(-1);
       } else {
         setIsSubmit(false);

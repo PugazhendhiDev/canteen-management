@@ -35,6 +35,7 @@ function EditCatagory() {
 
       if (response) {
         setIsSubmit(true);
+        sessionStorage.removeItem("catagories");
         navigate(-1);
       } else {
         setIsSubmit(false);
@@ -61,7 +62,12 @@ function EditCatagory() {
       }
     }
 
-    fetchCatagory();
+    if (sessionStorage.getItem("catagories")) {
+      const data = JSON.parse(sessionStorage.getItem("catagories"));
+      setValue(data.find((obj) => obj.id == id.id));
+    } else {
+      fetchCatagory();
+    }
   }, []);
 
   async function handleDelete() {
@@ -73,6 +79,7 @@ function EditCatagory() {
       });
 
       if (res) {
+        sessionStorage.removeItem("catagories");
         navigate(-1);
       }
 

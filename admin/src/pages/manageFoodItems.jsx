@@ -23,12 +23,25 @@ function ManageFoodItems() {
               : [response.data.data]
           );
         }
+
+        sessionStorage.setItem(
+          "food_items",
+          JSON.stringify(
+            Array.isArray(response.data.data)
+              ? response.data.data
+              : [response.data.data]
+          )
+        );
       } catch (err) {
         toast.error(err.response);
       }
     }
 
-    fetchFoodItems();
+    if (sessionStorage.getItem("food_items")) {
+      setValue(JSON.parse(sessionStorage.getItem("food_items")));
+    } else {
+      fetchFoodItems();
+    }
   }, []);
 
   return (
@@ -55,8 +68,8 @@ function ManageFoodItems() {
           </Link>
           <div className="page-card-container">
             {value.map((value, index) => (
-              <div className="page-card-wrapper">
-                <Link className="page-card" to="/food-details" key={index}>
+              <div className="page-card-wrapper" key={index}>
+                <Link className="page-card" to="/food-details">
                   <img src={value.image_link} loading="lazy" />
                   <p>
                     {value.name.length > 20

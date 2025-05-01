@@ -42,6 +42,7 @@ function EditFood() {
 
       if (response) {
         setIsSubmit(true);
+        sessionStorage.removeItem("food_items");
         navigate(-1);
       } else {
         setIsSubmit(false);
@@ -71,7 +72,12 @@ function EditFood() {
       }
     }
 
-    fetchFood();
+    if (sessionStorage.getItem("food_items")) {
+      const data = JSON.parse(sessionStorage.getItem("food_items"));
+      setValue(data.find((obj) => obj.id == id.id));
+    } else {
+      fetchFood();
+    }
   }, []);
 
   async function handleDelete() {
@@ -83,6 +89,7 @@ function EditFood() {
       });
 
       if (res) {
+        sessionStorage.removeItem("food_items");
         navigate(-1);
       }
 
