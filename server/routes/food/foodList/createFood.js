@@ -3,14 +3,14 @@ const router = express.Router();
 
 function CreateFood(supabase) {
   router.post("/api/admin/create-food", async (req, res) => {
-    const { catagory_id, name, image_link, description, rate, quantity } =
+    const { category_id, name, image_link, description, rate, quantity } =
       req.body;
     try {
       const { data, error } = await supabase
         .from("food_list")
         .insert([
           {
-            catagory_id,
+            category_id,
             name,
             image_link,
             description,

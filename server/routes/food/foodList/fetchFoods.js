@@ -8,7 +8,7 @@ function FetchFoods(supabase) {
       const { data, error } = await supabase
         .from("food_list")
         .select("*")
-        .eq("catagory_id", id);
+        .eq("category_id", id);
 
       if (error) return res.status(500).json({ error: error.message });
 

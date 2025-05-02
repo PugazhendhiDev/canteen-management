@@ -23,13 +23,13 @@ function CreateFood() {
     .getPropertyValue("--loader-color")
     .trim();
 
-  const handleCatagoryCreation = async (e) => {
+  const handlecategoryCreation = async (e) => {
     e.preventDefault();
     setIsSubmit(true);
 
     try {
       const response = await axiosInstance.post("/api/admin/create-food", {
-        catagory_id: id.id,
+        category_id: id.id,
         name: value.name,
         image_link: value.image_link,
         description: value.description,
@@ -75,7 +75,7 @@ function CreateFood() {
       <div className="page-container">
         <div className="page-body">
           <ToastContainer />
-          <form className="form-container" onSubmit={handleCatagoryCreation}>
+          <form className="form-container" onSubmit={handlecategoryCreation}>
             <h2>ADMIN</h2>
             <div className="form-header">
               <img src={Logo} alt="Logo" />

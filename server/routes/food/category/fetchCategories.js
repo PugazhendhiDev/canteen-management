@@ -1,20 +1,17 @@
 const express = require("express");
 const router = express.Router();
 
-function FetchSpecificCatagory(supabase) {
-  router.get("/api/admin/fetch-specific-catagory/:id", async (req, res) => {
-    const { id } = req.params;
+function FetchCategories(supabase) {
+  router.get("/api/fetch-categories", async (req, res) => {
     try {
       const { data, error } = await supabase
-        .from("food_catagories")
-        .select("*")
-        .eq("id", id)
-        .maybeSingle();
+        .from("food_categories")
+        .select("*");
 
       if (error) return res.status(500).json({ error: error.message });
 
       res.status(200).json({
-        message: "Catagory fetched successfully",
+        message: "categories fetched successfully",
         data: data,
       });
     } catch (error) {
@@ -25,4 +22,4 @@ function FetchSpecificCatagory(supabase) {
   return router;
 }
 
-module.exports = FetchSpecificCatagory;
+module.exports = FetchCategories;

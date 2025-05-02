@@ -1,15 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
-function UpdateCatagory(supabase) {
-  router.put("/api/admin/update-catagory", async (req, res) => {
-    const { id, catagory, image_link } = req.body;
+function UpdateCategory(supabase) {
+  router.put("/api/admin/update-category", async (req, res) => {
+    const { id, category, image_link } = req.body;
     try {
       const { data, error } = await supabase
-        .from("food_catagories")
+        .from("food_categories")
         .update({
-          ...(catagory &&
-            image_link && { catagory, image_link }),
+          ...(category &&
+            image_link && { category, image_link }),
         })
         .eq("id", id)
         .select();
@@ -17,11 +17,11 @@ function UpdateCatagory(supabase) {
       if (error) return res.status(500).json({ error: error.message });
 
       res.status(200).json({
-        message: "Catagory updated",
+        message: "category updated",
         data: data,
       });
     } catch (error) {
-      console.error("Error updating catagory:", error);
+      console.error("Error updating category:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   });
@@ -29,4 +29,4 @@ function UpdateCatagory(supabase) {
   return router;
 }
 
-module.exports = UpdateCatagory;
+module.exports = UpdateCategory;

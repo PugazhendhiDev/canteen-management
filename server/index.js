@@ -18,11 +18,11 @@ const UpdateAccount = require("./routes/accountManagement/updateAccount");
 const DeleteAccount = require("./routes/accountManagement/deleteAccount");
 const AdminAccountCreation = require("./routes/adminAuth/adminAccountCreation");
 const AdminLogin = require("./routes/adminAuth/adminLogin");
-const CreateCatagory = require("./routes/food/catagory/createCatagory");
-const UpdateCatagory = require("./routes/food/catagory/updateCatagory");
-const DeleteCatagory = require("./routes/food/catagory/deleteCatagory");
-const FetchCatagories = require("./routes/food/catagory/fetchCatagories");
-const FetchSpecificCatagory = require("./routes/food/catagory/fetchSpecificCatagory");
+const CreateCategory = require("./routes/food/category/createCategory");
+const UpdateCategory = require("./routes/food/category/updateCategory");
+const DeleteCategory = require("./routes/food/category/deleteCategory");
+const FetchCategories = require("./routes/food/category/fetchCategories");
+const FetchSpecificCategory = require("./routes/food/category/fetchSpecificCategory");
 const CreateFood = require("./routes/food/foodList/createFood");
 const UpdateFood = require("./routes/food/foodList/updateFood");
 const DeleteFood = require("./routes/food/foodList/deleteFood");
@@ -167,15 +167,15 @@ app.put(
   UpdateUserDetails(admin, supabase)
 );
 
-//food catagory
-app.get("/api/fetch-catagories", FetchCatagories(supabase));
+//food category
+app.get("/api/fetch-categories", FetchCategories(supabase));
 app.get(
-  "/api/admin/fetch-specific-catagory/:id",
-  FetchSpecificCatagory(supabase)
+  "/api/admin/fetch-specific-category/:id",
+  FetchSpecificCategory(supabase)
 );
-app.post("/api/admin/create-catagory", CreateCatagory(supabase));
-app.put("/api/admin/update-catagory", UpdateCatagory(supabase));
-app.delete("/api/admin/delete-catagory", DeleteCatagory(supabase));
+app.post("/api/admin/create-category", CreateCategory(supabase));
+app.put("/api/admin/update-category", UpdateCategory(supabase));
+app.delete("/api/admin/delete-category", DeleteCategory(supabase));
 
 //food list
 app.get("/api/fetch-foods/:id", FetchFoods(supabase));

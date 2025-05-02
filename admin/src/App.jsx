@@ -17,8 +17,8 @@ import AccountCreation from "./pages/accountCreation";
 import AccountManagement from "./pages/accountManagement";
 import EditAccount from "./pages/editAccount";
 import ManageFoods from "./pages/manageFoods";
-import CreateCatagory from "./pages/createCatagory";
-import EditCatagory from "./pages/editCatagory";
+import CreateCategory from "./pages/createCategory";
+import EditCategory from "./pages/editCategory";
 import ManageFoodItems from "./pages/manageFoodItems";
 import CreateFood from "./pages/createFood";
 import EditFood from "./pages/editFood";
@@ -180,7 +180,7 @@ function App() {
       />
 
       <Route
-        path="/catagory-management"
+        path="/category-management"
         element={
           user && user.emailVerified ? (
             <ManageFoods />
@@ -190,20 +190,20 @@ function App() {
         }
       />
       <Route
-        path="/create-catagory"
+        path="/create-category"
         element={
           user && user.emailVerified ? (
-            <CreateCatagory />
+            <CreateCategory />
           ) : (
             <Navigate to="/" replace />
           )
         }
       />
       <Route
-        path="/edit-catagory/:id"
+        path="/edit-category/:id"
         element={
           user && user.emailVerified ? (
-            <EditCatagory />
+            <EditCategory />
           ) : (
             <Navigate to="/" replace />
           )

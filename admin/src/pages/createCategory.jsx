@@ -7,9 +7,9 @@ import axiosInstance from "../configuration/axios";
 import { ToastContainer, toast } from "react-toastify";
 import PulseLoader from "react-spinners/PulseLoader";
 
-function CreateCatagory() {
+function CreateCategory() {
   const [value, setValue] = useState({
-    catagory: "",
+    category: "",
     image_link: "",
   });
   const [isSubmit, setIsSubmit] = useState(false);
@@ -19,24 +19,24 @@ function CreateCatagory() {
     .getPropertyValue("--loader-color")
     .trim();
 
-  const handleCatagoryCreation = async (e) => {
+  const handleCategoryCreation = async (e) => {
     e.preventDefault();
     setIsSubmit(true);
 
     try {
-      const response = await axiosInstance.post("/api/admin/create-catagory", {
-        catagory: value.catagory,
+      const response = await axiosInstance.post("/api/admin/create-category", {
+        category: value.category,
         image_link: value.image_link,
       });
 
       if (response) {
         setIsSubmit(true);
-        sessionStorage.removeItem("catagories");
+        sessionStorage.removeItem("categories");
         navigate(-1);
       } else {
         setIsSubmit(false);
         setValue({
-          catagory: "",
+          category: "",
           image_link: "",
         });
       }
@@ -64,7 +64,7 @@ function CreateCatagory() {
       <div className="page-container">
         <div className="page-body">
           <ToastContainer />
-          <form className="form-container" onSubmit={handleCatagoryCreation}>
+          <form className="form-container" onSubmit={handleCategoryCreation}>
             <h2>ADMIN</h2>
             <div className="form-header">
               <img src={Logo} alt="Logo" />
@@ -72,14 +72,14 @@ function CreateCatagory() {
             <div className="form-body">
               <input
                 className="form-input"
-                placeholder="Catagory name"
+                placeholder="category name"
                 type="text"
-                name="catagory"
-                value={value.catagory}
+                name="category"
+                value={value.category}
                 onChange={(e) =>
                   setValue({
                     ...value,
-                    catagory: e.target.value,
+                    category: e.target.value,
                   })
                 }
                 required
@@ -104,7 +104,7 @@ function CreateCatagory() {
                 </button>
               ) : (
                 <button className="form-button" type="submit">
-                  Create catagory
+                  Create category
                 </button>
               )}
             </div>
@@ -115,4 +115,4 @@ function CreateCatagory() {
   );
 }
 
-export default CreateCatagory;
+export default CreateCategory;

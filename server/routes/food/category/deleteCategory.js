@@ -1,23 +1,23 @@
 const express = require("express");
 const router = express.Router();
 
-function DeleteCatagory(supabase) {
-  router.delete("/api/admin/delete-catagory", async (req, res) => {
+function DeleteCategory(supabase) {
+  router.delete("/api/admin/delete-category", async (req, res) => {
     const { id } = req.body;
 
     try {
       const { data, error } = await supabase
-        .from("food_catagories")
+        .from("food_categories")
         .delete()
         .eq("id", id);
 
       if (error) return res.status(500).json({ error: error.message });
 
       res.status(200).json({
-        message: "Catagory deleted",
+        message: "category deleted",
       });
     } catch (error) {
-      console.error("Error deleting catagory:", error);
+      console.error("Error deleting category:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   });
@@ -25,4 +25,4 @@ function DeleteCatagory(supabase) {
   return router;
 }
 
-module.exports = DeleteCatagory;
+module.exports = DeleteCategory;

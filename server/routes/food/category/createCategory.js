@@ -1,16 +1,15 @@
 const express = require("express");
-const { messaging } = require("firebase-admin");
 const router = express.Router();
 
-function CreateCatagory(supabase) {
-  router.post("/api/admin/create-catagory", async (req, res) => {
-    const { catagory, image_link } = req.body;
+function CreateCategory(supabase) {
+  router.post("/api/admin/create-category", async (req, res) => {
+    const { category, image_link } = req.body;
     try {
       const { data, error } = await supabase
-        .from("food_catagories")
+        .from("food_categories")
         .insert([
           {
-            catagory,
+            category,
             image_link,
           },
         ])
@@ -26,7 +25,7 @@ function CreateCatagory(supabase) {
       if (error) return res.status(500).json({ error: error.message });
 
       res.status(200).json({
-        message: "Catagory created",
+        message: "category created",
         data: data,
       });
     } catch (error) {
@@ -37,4 +36,4 @@ function CreateCatagory(supabase) {
   return router;
 }
 
-module.exports = CreateCatagory;
+module.exports = CreateCategory;

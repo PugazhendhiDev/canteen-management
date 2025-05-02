@@ -10,9 +10,9 @@ function Home() {
   const [value, setValue] = useState([]);
 
   useEffect(() => {
-    async function fetchCatagory() {
+    async function fetchCategory() {
       try {
-        const response = await axiosInstance.get("/api/fetch-catagories");
+        const response = await axiosInstance.get("/api/fetch-categories");
 
         if (response) {
           setValue(
@@ -22,7 +22,7 @@ function Home() {
           );
 
           sessionStorage.setItem(
-            "catagories",
+            "categories",
             JSON.stringify(
               Array.isArray(response.data.data)
                 ? response.data.data
@@ -35,10 +35,10 @@ function Home() {
       }
     }
 
-    if (sessionStorage.getItem("catagories")) {
-      setValue(JSON.parse(sessionStorage.getItem("catagories")));
+    if (sessionStorage.getItem("categories")) {
+      setValue(JSON.parse(sessionStorage.getItem("categories")));
     } else {
-      fetchCatagory();
+      fetchCategory();
     }
   }, []);
 
@@ -60,16 +60,16 @@ function Home() {
       </div>
       <div className="page-container">
         <div className="page-body">
-          <h2>CATAGORY</h2>
+          <h2>category</h2>
           <div className="page-card-container margin-bottom-20">
             {value.map((value, index) => (
               <div className="page-card-wrapper" key={index}>
                 <Link className="page-card" to={`/food-list/${value.id}`}>
                   <img src={value.image_link} loading="lazy" />
                   <p>
-                    {value.catagory.length > 20
-                      ? `${value.catagory.slice(0, 20)}...`
-                      : value.catagory}
+                    {value.category.length > 20
+                      ? `${value.category.slice(0, 20)}...`
+                      : value.category}
                   </p>
                 </Link>
               </div>

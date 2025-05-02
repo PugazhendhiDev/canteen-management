@@ -10,9 +10,9 @@ function ManageFoods() {
   const [value, setValue] = useState([]);
 
   useEffect(() => {
-    async function fetchCatagory() {
+    async function fetchCategory() {
       try {
-        const response = await axiosInstance.get("/api/fetch-catagories");
+        const response = await axiosInstance.get("/api/fetch-categories");
 
         if (response) {
           setValue(
@@ -22,7 +22,7 @@ function ManageFoods() {
           );
 
           sessionStorage.setItem(
-            "catagories",
+            "categories",
             JSON.stringify(
               Array.isArray(response.data.data)
                 ? response.data.data
@@ -35,10 +35,10 @@ function ManageFoods() {
       }
     }
 
-    if (sessionStorage.getItem("catagories")) {
-      setValue(JSON.parse(sessionStorage.getItem("catagories")));
+    if (sessionStorage.getItem("categories")) {
+      setValue(JSON.parse(sessionStorage.getItem("categories")));
     } else {
-      fetchCatagory();
+      fetchCategory();
     }
   }, []);
 
@@ -61,8 +61,8 @@ function ManageFoods() {
       <div className="page-container">
         <div className="page-body">
           <h2>ADMIN</h2>
-          <Link className="link margin-bottom-20" to="/create-catagory">
-            Create catagory
+          <Link className="link margin-bottom-20" to="/create-category">
+            Create category
           </Link>
           <div className="page-card-container margin-bottom-20">
             {value.map((value, index) => (
@@ -70,14 +70,14 @@ function ManageFoods() {
                 <Link className="page-card" to={`/food-management/${value.id}`}>
                   <img src={value.image_link} loading="lazy" />
                   <p>
-                    {value.catagory.length > 20
-                      ? `${value.catagory.slice(0, 20)}...`
-                      : value.catagory}
+                    {value.category.length > 20
+                      ? `${value.category.slice(0, 20)}...`
+                      : value.category}
                   </p>
                 </Link>
                 <Link
                   className="link margin-top-20"
-                  to={`/edit-catagory/${value.id}`}
+                  to={`/edit-category/${value.id}`}
                 >
                   Edit
                 </Link>

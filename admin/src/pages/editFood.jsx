@@ -32,7 +32,7 @@ function EditFood() {
     try {
       const response = await axiosInstance.put("/api/admin/update-food", {
         id: value.id,
-        catagory_id: value.catagory_id,
+        category_id: value.category_id,
         name: value.name,
         image_link: value.image_link,
         description: value.description,
@@ -42,7 +42,7 @@ function EditFood() {
 
       if (response) {
         setIsSubmit(true);
-        sessionStorage.removeItem(`food-items-${value.catagory_id}`);
+        sessionStorage.removeItem(`food-items-${value.category_id}`);
         navigate(-1);
       } else {
         setIsSubmit(false);
@@ -72,9 +72,9 @@ function EditFood() {
       }
     }
 
-    if (sessionStorage.getItem(`food-items-${value.catagory_id}`)) {
+    if (sessionStorage.getItem(`food-items-${value.category_id}`)) {
       const data = JSON.parse(
-        sessionStorage.getItem(`food-items-${value.catagory_id}`)
+        sessionStorage.getItem(`food-items-${value.category_id}`)
       );
       setValue(data.find((obj) => obj.id == id.id));
     } else {
@@ -91,7 +91,7 @@ function EditFood() {
       });
 
       if (res) {
-        sessionStorage.removeItem(`food-items-${value.catagory_id}`);
+        sessionStorage.removeItem(`food-items-${value.category_id}`);
         navigate(-1);
       }
 

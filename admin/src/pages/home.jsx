@@ -40,7 +40,7 @@ function Home() {
               <p>Account Management</p>
             </Link>
 
-            <Link className="page-card" to="/catagory-management">
+            <Link className="page-card" to="/category-management">
               <div className="page-card-img">
                 <FoodManagementIcon />
               </div>

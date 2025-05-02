@@ -8,10 +8,10 @@ import { ToastContainer, toast } from "react-toastify";
 import PulseLoader from "react-spinners/PulseLoader";
 import DeleteIcon from "../assets/icons/deleteIcon";
 
-function EditCatagory() {
+function EditCategory() {
   const id = useParams();
   const [value, setValue] = useState({
-    catagory: "",
+    category: "",
     image_link: "",
   });
   const [isSubmit, setIsSubmit] = useState(false);
@@ -27,15 +27,15 @@ function EditCatagory() {
     setIsSubmit(true);
 
     try {
-      const response = await axiosInstance.put("/api/admin/update-catagory", {
+      const response = await axiosInstance.put("/api/admin/update-category", {
         id: id.id,
-        catagory: value.catagory,
+        category: value.category,
         image_link: value.image_link,
       });
 
       if (response) {
         setIsSubmit(true);
-        sessionStorage.removeItem("catagories");
+        sessionStorage.removeItem("categories");
         navigate(-1);
       } else {
         setIsSubmit(false);
@@ -51,22 +51,22 @@ function EditCatagory() {
   };
 
   useEffect(() => {
-    async function fetchCatagory() {
+    async function fetchCategory() {
       try {
         const response = await axiosInstance.get(
-          `/api/admin/fetch-specific-catagory/${id.id}`
+          `/api/admin/fetch-specific-category/${id.id}`
         );
         setValue(response.data.data);
       } catch (err) {
-        console.error("Error fetching catagory detail", err);
+        console.error("Error fetching category detail", err);
       }
     }
 
-    if (sessionStorage.getItem("catagories")) {
-      const data = JSON.parse(sessionStorage.getItem("catagories"));
+    if (sessionStorage.getItem("categories")) {
+      const data = JSON.parse(sessionStorage.getItem("categories"));
       setValue(data.find((obj) => obj.id == id.id));
     } else {
-      fetchCatagory();
+      fetchCategory();
     }
   }, []);
 
@@ -74,12 +74,12 @@ function EditCatagory() {
     setDeleted(true);
     toast("Deleting...");
     try {
-      const res = await axiosInstance.delete("/api/admin/delete-catagory", {
+      const res = await axiosInstance.delete("/api/admin/delete-category", {
         data: { id: id.id },
       });
 
       if (res) {
-        sessionStorage.removeItem("catagories");
+        sessionStorage.removeItem("categories");
         navigate(-1);
       }
 
@@ -117,14 +117,14 @@ function EditCatagory() {
               <div className="form-body">
                 <input
                   className="form-input"
-                  placeholder="Catagory name"
+                  placeholder="category name"
                   type="text"
-                  name="catagory"
-                  value={value.catagory}
+                  name="category"
+                  value={value.category}
                   onChange={(e) =>
                     setValue({
                       ...value,
-                      catagory: e.target.value,
+                      category: e.target.value,
                     })
                   }
                   required
@@ -159,7 +159,7 @@ function EditCatagory() {
                   </button>
                 ) : (
                   <button className="form-button" type="submit">
-                    Edit Catagory
+                    Edit category
                   </button>
                 )}
               </div>
@@ -176,4 +176,4 @@ function EditCatagory() {
   );
 }
 
-export default EditCatagory;
+export default EditCategory;
