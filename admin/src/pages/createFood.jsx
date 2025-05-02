@@ -39,7 +39,7 @@ function CreateFood() {
 
       if (response) {
         setIsSubmit(true);
-        sessionStorage.removeItem("food_items");
+        sessionStorage.removeItem(`food-items-${id.id}`);
         navigate(-1);
       } else {
         setIsSubmit(false);

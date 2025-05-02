@@ -152,7 +152,7 @@ function App() {
       />
 
       <Route
-        path="/food-list"
+        path="/food-list/:id"
         element={
           user && user.emailVerified ? (
             <FoodList />
@@ -162,7 +162,7 @@ function App() {
         }
       />
       <Route
-        path="/food-details"
+        path="/food-details/:id"
         element={
           user && user.emailVerified ? (
             <FoodDetails />

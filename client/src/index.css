@@ -1,16 +1,20 @@
 * {
-  --background-color: #FFFAFA;
+  --background-color: #fffafa;
   --border-color: #888;
   --placeholder-color: #888;
   --form-bg-btn-color: #000;
   --form-btn-color: #fff;
   --hover-color: #888;
+  --disabled-btn-color: #888;
+  --primary-color: #fe7d0d;
   --secondary-color: #888;
   --loader-color: #fff;
   --page-loader-color: #000;
   --btn-border-color: #fff;
   --page-bg-animation-color: #000;
   --text-color: #000;
+  --secondary-text-color: #fff;
+  --outline-color: #fff;
 }
 
 :root {

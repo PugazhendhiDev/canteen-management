@@ -42,7 +42,7 @@ function EditFood() {
 
       if (response) {
         setIsSubmit(true);
-        sessionStorage.removeItem("food_items");
+        sessionStorage.removeItem(`food-items-${value.catagory_id}`);
         navigate(-1);
       } else {
         setIsSubmit(false);
@@ -72,8 +72,10 @@ function EditFood() {
       }
     }
 
-    if (sessionStorage.getItem("food_items")) {
-      const data = JSON.parse(sessionStorage.getItem("food_items"));
+    if (sessionStorage.getItem(`food-items-${value.catagory_id}`)) {
+      const data = JSON.parse(
+        sessionStorage.getItem(`food-items-${value.catagory_id}`)
+      );
       setValue(data.find((obj) => obj.id == id.id));
     } else {
       fetchFood();
@@ -89,7 +91,7 @@ function EditFood() {
       });
 
       if (res) {
-        sessionStorage.removeItem("food_items");
+        sessionStorage.removeItem(`food-items-${value.catagory_id}`);
         navigate(-1);
       }
 

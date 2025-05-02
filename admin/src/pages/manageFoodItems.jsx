@@ -25,7 +25,7 @@ function ManageFoodItems() {
         }
 
         sessionStorage.setItem(
-          "food_items",
+          `food-items-${id.id}`,
           JSON.stringify(
             Array.isArray(response.data.data)
               ? response.data.data
@@ -37,8 +37,8 @@ function ManageFoodItems() {
       }
     }
 
-    if (sessionStorage.getItem("food_items")) {
-      setValue(JSON.parse(sessionStorage.getItem("food_items")));
+    if (sessionStorage.getItem(`food-items-${id.id}`)) {
+      setValue(JSON.parse(sessionStorage.getItem(`food-items-${id.id}`)));
     } else {
       fetchFoodItems();
     }
