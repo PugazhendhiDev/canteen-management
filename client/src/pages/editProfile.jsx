@@ -89,117 +89,115 @@ function EditProfile() {
       </div>
       <div className="page-container">
         <div className="page-body">
-          <div className="form-wrapper">
-            <ToastContainer />
-            <form className="form-container" onSubmit={handleUpdate}>
-              <div className="form-header">
-                <img src={Logo} alt="Logo" />
-              </div>
-              <div className="form-body">
-                <input
-                  className="form-input"
-                  placeholder="Enter your name"
-                  type="text"
-                  name="name"
-                  value={userData.name || ""}
-                  onChange={(e) =>
-                    setUserData({
-                      ...userData,
-                      name: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <input
-                  className="form-input"
-                  placeholder="Enter your roll no"
-                  type="text"
-                  name="roll_no"
-                  value={userData.roll_no || ""}
-                  onChange={(e) =>
-                    setUserData({
-                      ...userData,
-                      roll_no: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <input
-                  className="form-input"
-                  placeholder="Enter your department"
-                  type="text"
-                  name="dept"
-                  value={userData.dept || ""}
-                  onChange={(e) =>
-                    setUserData({
-                      ...userData,
-                      dept: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <input
-                  className="form-input"
-                  placeholder="Enter your section"
-                  type="text"
-                  name="section"
-                  value={userData.section || ""}
-                  onChange={(e) =>
-                    setUserData({
-                      ...userData,
-                      section: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <select
-                  className="form-select"
-                  name="year"
-                  value={userData.year || ""}
-                  onChange={(e) =>
-                    setUserData({
-                      ...userData,
-                      year: e.target.value,
-                    })
-                  }
-                >
-                  <option value="">Select a year</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                </select>
-                <select
-                  className="form-select"
-                  name="batch"
-                  value={userData.batch || ""}
-                  onChange={(e) =>
-                    setUserData({
-                      ...userData,
-                      batch: e.target.value,
-                    })
-                  }
-                >
-                  <option value="">Select a batch</option>
-                  {batchList.map((item, index) => (
-                    <option key={index} value={item.batch}>
-                      {item.batch}
-                    </option>
-                  ))}
-                </select>
+          <ToastContainer />
+          <form className="form-container" onSubmit={handleUpdate}>
+            <div className="form-header">
+              <img src={Logo} alt="Logo" />
+            </div>
+            <div className="form-body">
+              <input
+                className="form-input"
+                placeholder="Enter your name"
+                type="text"
+                name="name"
+                value={userData.name || ""}
+                onChange={(e) =>
+                  setUserData({
+                    ...userData,
+                    name: e.target.value,
+                  })
+                }
+                required
+              />
+              <input
+                className="form-input"
+                placeholder="Enter your roll no"
+                type="text"
+                name="roll_no"
+                value={userData.roll_no || ""}
+                onChange={(e) =>
+                  setUserData({
+                    ...userData,
+                    roll_no: e.target.value,
+                  })
+                }
+                required
+              />
+              <input
+                className="form-input"
+                placeholder="Enter your department"
+                type="text"
+                name="dept"
+                value={userData.dept || ""}
+                onChange={(e) =>
+                  setUserData({
+                    ...userData,
+                    dept: e.target.value,
+                  })
+                }
+                required
+              />
+              <input
+                className="form-input"
+                placeholder="Enter your section"
+                type="text"
+                name="section"
+                value={userData.section || ""}
+                onChange={(e) =>
+                  setUserData({
+                    ...userData,
+                    section: e.target.value,
+                  })
+                }
+                required
+              />
+              <select
+                className="form-select"
+                name="year"
+                value={userData.year || ""}
+                onChange={(e) =>
+                  setUserData({
+                    ...userData,
+                    year: e.target.value,
+                  })
+                }
+              >
+                <option value="">Select a year</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <select
+                className="form-select"
+                name="batch"
+                value={userData.batch || ""}
+                onChange={(e) =>
+                  setUserData({
+                    ...userData,
+                    batch: e.target.value,
+                  })
+                }
+              >
+                <option value="">Select a batch</option>
+                {batchList.map((item, index) => (
+                  <option key={index} value={item.batch}>
+                    {item.batch}
+                  </option>
+                ))}
+              </select>
 
-                {isSubmit ? (
-                  <button className="form-button" type="submit" disabled>
-                    <PulseLoader size={5} color={loaderColor} />
-                  </button>
-                ) : (
-                  <button className="form-button" type="submit">
-                    Submit
-                  </button>
-                )}
-              </div>
-            </form>
-          </div>
+              {isSubmit ? (
+                <button className="form-button" type="submit" disabled>
+                  <PulseLoader size={5} color={loaderColor} />
+                </button>
+              ) : (
+                <button className="form-button" type="submit">
+                  Submit
+                </button>
+              )}
+            </div>
+          </form>
         </div>
       </div>
     </div>
