@@ -27,8 +27,8 @@ function FoodDetails() {
       }
     }
 
-    if (sessionStorage.getItem("food_items")) {
-      const data = JSON.parse(sessionStorage.getItem("food_items"));
+    if (sessionStorage.getItem(`food-items-${id.id}`)) {
+      const data = JSON.parse(sessionStorage.getItem(`food-items-${id.id}`));
       setValue(data.find((obj) => obj.id == id.id));
     } else {
       fetchFood();
