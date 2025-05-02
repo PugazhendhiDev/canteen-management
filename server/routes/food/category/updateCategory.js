@@ -17,7 +17,7 @@ function UpdateCategory(supabase) {
       if (error) return res.status(500).json({ error: error.message });
 
       res.status(200).json({
-        message: "category updated",
+        message: "Category updated",
         data: data,
       });
     } catch (error) {

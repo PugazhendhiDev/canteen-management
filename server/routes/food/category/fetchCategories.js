@@ -11,7 +11,7 @@ function FetchCategories(supabase) {
       if (error) return res.status(500).json({ error: error.message });
 
       res.status(200).json({
-        message: "categories fetched successfully",
+        message: "Categories fetched successfully",
         data: data,
       });
     } catch (error) {

@@ -12,7 +12,7 @@ function GetBatchList(supabase) {
       if (error) return res.status(500).json({ error: error.message });
 
       res.status(200).json({
-        message: "batch list fetched successfully",
+        message: "Batch list fetched successfully",
         data: data,
       });
     } catch (error) {

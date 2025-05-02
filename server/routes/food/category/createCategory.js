@@ -25,7 +25,7 @@ function CreateCategory(supabase) {
       if (error) return res.status(500).json({ error: error.message });
 
       res.status(200).json({
-        message: "category created",
+        message: "Category created",
         data: data,
       });
     } catch (error) {

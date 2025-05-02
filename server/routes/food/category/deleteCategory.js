@@ -14,7 +14,7 @@ function DeleteCategory(supabase) {
       if (error) return res.status(500).json({ error: error.message });
 
       res.status(200).json({
-        message: "category deleted",
+        message: "Category deleted",
       });
     } catch (error) {
       console.error("Error deleting category:", error);
