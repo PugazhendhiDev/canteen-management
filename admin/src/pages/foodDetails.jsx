@@ -52,17 +52,30 @@ function FoodDetails() {
       </div>
       <div className="page-container">
         <div className="page-body">
-          <h2>ADMIN</h2>
-          {value.image_link && <img src={value.image_link} loading="lazy" />}
-          <h2>{value.name}</h2>
-          <p>{value.description}</p>
-          <div className="highlight-container">
-            <div className="highlight-normal">Quantity: {value.quantity}</div>
-            <div className="highlight-unique">Price: {value.rate}</div>
-            <Link className="highlight-normal" to={`/edit-food/${id.id}`}>
-              Edit
-            </Link>
-          </div>
+          {value ? (
+            <>
+              <h2>ADMIN</h2>
+              {value.image_link && (
+                <img src={value.image_link} loading="lazy" />
+              )}
+              <h2>{value.name}</h2>
+              <p>{value.description}</p>
+              <div className="highlight-container">
+                <div className="highlight-normal">
+                  Quantity: {value.quantity}
+                </div>
+                <div className="highlight-unique">Price: {value.rate}</div>
+                <Link className="highlight-normal" to={`/edit-food/${id.id}`}>
+                  Edit
+                </Link>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2>ADMIN</h2>
+              <h2>Not found</h2>
+            </>
+          )}
         </div>
       </div>
     </div>
