@@ -143,6 +143,15 @@ function EditCategory() {
                   }
                   required
                 />
+                {isSubmit ? (
+                  <button className="form-button" type="submit" disabled>
+                    <PulseLoader size={5} color={loaderColor} />
+                  </button>
+                ) : (
+                  <button className="form-button" type="submit">
+                    Edit Category
+                  </button>
+                )}
                 <div className="page-center">
                   <div
                     className="page-btn btn-20w-20h delete-btn"
@@ -153,15 +162,6 @@ function EditCategory() {
                     <DeleteIcon />
                   </div>
                 </div>
-                {isSubmit ? (
-                  <button className="form-button" type="submit" disabled>
-                    <PulseLoader size={5} color={loaderColor} />
-                  </button>
-                ) : (
-                  <button className="form-button" type="submit">
-                    Edit category
-                  </button>
-                )}
               </div>
             </form>
           ) : (

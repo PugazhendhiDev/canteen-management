@@ -197,6 +197,15 @@ function EditFood() {
                   }
                   required
                 />
+                {isSubmit ? (
+                  <button className="form-button" type="submit" disabled>
+                    <PulseLoader size={5} color={loaderColor} />
+                  </button>
+                ) : (
+                  <button className="form-button" type="submit">
+                    Edit Food
+                  </button>
+                )}
                 <div className="page-center">
                   <div
                     className="page-btn btn-20w-20h delete-btn"
@@ -207,15 +216,6 @@ function EditFood() {
                     <DeleteIcon />
                   </div>
                 </div>
-                {isSubmit ? (
-                  <button className="form-button" type="submit" disabled>
-                    <PulseLoader size={5} color={loaderColor} />
-                  </button>
-                ) : (
-                  <button className="form-button" type="submit">
-                    Edit Food
-                  </button>
-                )}
               </div>
             </form>
           ) : (
