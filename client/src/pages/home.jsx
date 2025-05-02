@@ -60,7 +60,7 @@ function Home() {
       </div>
       <div className="page-container">
         <div className="page-body">
-          <h2>category</h2>
+          <h2>CATEGORY</h2>
           <div className="page-card-container margin-bottom-20">
             {value.map((value, index) => (
               <div className="page-card-wrapper" key={index}>
