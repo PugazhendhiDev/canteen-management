@@ -19,7 +19,7 @@ function FoodDetails() {
     async function fetchFood() {
       try {
         const response = await axiosInstance.get(
-          `/api/admin/fetch-specific-food/${id.id}`
+          `/api/fetch-specific-food/${id.id}`
         );
         setValue(response.data.data);
       } catch (err) {

@@ -1,20 +1,21 @@
 const express = require("express");
 const router = express.Router();
 
-function FetchSpecificFood(supabase) {
-  router.get("/api/fetch-specific-food/:id", async (req, res) => {
-    const { id } = req.params;
+function GetSpecificCartItem(supabase) {
+  router.get("/api/get-specific-cart-item/:food_id", async (req, res) => {
+    const { food_id } = req.params;
     try {
       const { data, error } = await supabase
-        .from("food_list")
+        .from("cart")
         .select("*")
-        .eq("id", id)
+        .eq("uid", req.uid)
+        .eq("food_id", food_id)
         .maybeSingle();
 
       if (error) return res.status(500).json({ error: error.message });
 
       res.status(200).json({
-        message: "Food fetched successfully",
+        message: "Cart item fetched successfully",
         data: data,
       });
     } catch (error) {
@@ -25,4 +26,4 @@ function FetchSpecificFood(supabase) {
   return router;
 }
 
-module.exports = FetchSpecificFood;
+module.exports = GetSpecificCartItem;
