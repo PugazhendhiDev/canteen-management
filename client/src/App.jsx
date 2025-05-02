@@ -16,6 +16,7 @@ import FoodList from "./pages/foodList";
 import FoodDetails from "./pages/foodDetails";
 import EditProfile from "./pages/editProfile";
 import SettingsPage from "./pages/settingsPage";
+import Cart from "./pages/cart";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -169,6 +170,12 @@ function App() {
           ) : (
             <Navigate to="/" replace />
           )
+        }
+      />
+      <Route
+        path="/cart"
+        element={
+          user && user.emailVerified ? <Cart /> : <Navigate to="/" replace />
         }
       />
     </Routes>

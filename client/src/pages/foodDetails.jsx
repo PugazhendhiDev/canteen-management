@@ -14,6 +14,7 @@ function FoodDetails() {
     rate: "",
     quantity: "",
   });
+  const [isItemInCart, setIsItemInCart] = useState(false);
 
   useEffect(() => {
     async function fetchFood() {
@@ -27,6 +28,12 @@ function FoodDetails() {
       }
     }
 
+    if (localStorage.getItem("cart")) {
+      JSON.parse(localStorage.getItem("cart")).find((obj) => obj.id == id.id)
+        ? setIsItemInCart(true)
+        : setIsItemInCart(false);
+    }
+
     if (sessionStorage.getItem(`food-items-${id.id}`)) {
       const data = JSON.parse(sessionStorage.getItem(`food-items-${id.id}`));
       setValue(data.find((obj) => obj.id == id.id));
@@ -34,6 +41,20 @@ function FoodDetails() {
       fetchFood();
     }
   }, []);
+
+  function addToCart(id) {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.push(id);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    setIsItemInCart(true);
+  }
+
+  function removeFromCart(id) {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const updatedCart = cart.filter((item) => item.id !== id.id);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    setIsItemInCart(false);
+  }
 
   return (
     <div className="page-wrapper">
@@ -58,7 +79,18 @@ function FoodDetails() {
           <p>{value.description}</p>
           <div className="highlight-container">
             <div className="highlight-normal">Quantity: {value.quantity}</div>
-            <div className="highlight-unique">Price: {value.rate}</div>
+            <div className="highlight-normal">Price: {value.rate}</div>
+            <div
+              className="highlight-normal"
+              onClick={() => {
+                isItemInCart
+                  ? removeFromCart({ id: value.id })
+                  : addToCart({ id: value.id });
+              }}
+            >
+              {isItemInCart ? "Remove from cart" : "Add to cart"}
+            </div>
+            <div className="highlight-unique">Buy</div>
           </div>
         </div>
       </div>

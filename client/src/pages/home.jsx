@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import axiosInstance from "../configuration/axios";
 import Logo from "../assets/logo.jpeg";
 import ProfileIcon from "../assets/icons/profileIcon";
+import CartIcon from "../assets/cards/cartIcon";
 
 function Home() {
   const [value, setValue] = useState([]);
@@ -60,6 +61,14 @@ function Home() {
       </div>
       <div className="page-container">
         <div className="page-body">
+          <div className="page-card-container">
+            <Link className="page-card" to="/cart">
+              <div className="page-card-img">
+                <CartIcon />
+              </div>
+              <p>Cart</p>
+            </Link>
+          </div>
           <h2>CATEGORY</h2>
           <div className="page-card-container margin-bottom-20">
             {value.map((value, index) => (
