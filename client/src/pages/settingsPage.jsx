@@ -27,6 +27,7 @@ function SettingsPage() {
         await signOut(auth)
           .then(() => {
             localStorage.clear();
+            sessionStorage.clear();
             setIsSubmit(false);
             navigate("/");
           })

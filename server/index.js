@@ -31,7 +31,7 @@ const FetchSpecificFood = require("./routes/food/foodList/fetchSpecificFood");
 const GetCartItems = require("./routes/userDetails/getCartItems");
 const GetSpecificCartItem = require("./routes/userDetails/getSpecificCartItem");
 const AddToCart = require("./routes/userDetails/addToCart");
-const UpdateCart = require("./routes/userDetails/updateCart");
+const QuantityUpdate = require("./routes/userDetails/quantityUpdate");
 const DeleteCartItem = require("./routes/userDetails/deleteCartItem");
 
 dotenv.config();
@@ -115,6 +115,41 @@ const authenticateAdminToken = async (req, res, next) => {
   }
 };
 
+const authenticateAdminEmail = async (req, res, next) => {
+  try {
+    if (!req.email || !req.uid) {
+      return res.status(400).json({ error: "Missing email or uid" });
+    }
+
+    const { data, error } = await supabase
+      .from("admin_accounts")
+      .select("*")
+      .eq("email", req.email)
+      .eq("uid", req.uid)
+      .single();
+
+    if (error && error.code !== "PGRST116") {
+      return res.status(500).json({ error: error.message });
+    }
+
+    if (data) {
+      next();
+    } else {
+      if (error && error.code === "PGRST116") {
+        return res.status(500).json({
+          message: "Use admin account",
+          error: error.message,
+        });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: "Error verifing admin",
+      error: error.message,
+    });
+  }
+};
+
 //auth
 app.get("/api/logout", authenticateToken, Logout());
 
@@ -130,64 +165,93 @@ app.post("/api/admin/login", authenticateToken, AdminLogin(supabase));
 app.post(
   "/api/admin/create-account",
   authenticateToken,
+  authenticateAdminEmail,
   AccountCreation(admin, supabase)
 );
 app.get(
   "/api/admin/fetch-accounts",
   authenticateToken,
+  authenticateAdminEmail,
   FetchAccounts(supabase)
 );
 app.get(
   "/api/admin/fetch-specific-account/:uid",
   authenticateToken,
+  authenticateAdminEmail,
   FetchSpecificAccount(supabase)
 );
 app.put(
   "/api/admin/update-account",
   authenticateToken,
+  authenticateAdminEmail,
   UpdateAccount(admin, supabase)
 );
 app.delete(
   "/api/admin/delete-account",
   authenticateToken,
+  authenticateAdminEmail,
   DeleteAccount(admin, supabase)
 );
 
 //user details
-app.get(
-  "/api/get-user-details",
-  authenticateToken,
-  GetUserDetails(admin, supabase)
-);
+app.get("/api/get-user-details", authenticateToken, GetUserDetails(supabase));
 
-app.post(
-  "/api/add-user-details",
-  authenticateToken,
-  AddUserDetails(admin, supabase)
-);
+app.post("/api/add-user-details", authenticateToken, AddUserDetails(supabase));
 
 app.put(
   "/api/update-user-details",
   authenticateToken,
-  UpdateUserDetails(admin, supabase)
+  UpdateUserDetails(supabase)
 );
 
 //food category
 app.get("/api/fetch-categories", FetchCategories(supabase));
 app.get(
   "/api/admin/fetch-specific-category/:id",
+  authenticateToken,
+  authenticateAdminEmail,
   FetchSpecificCategory(supabase)
 );
-app.post("/api/admin/create-category", CreateCategory(supabase));
-app.put("/api/admin/update-category", UpdateCategory(supabase));
-app.delete("/api/admin/delete-category", DeleteCategory(supabase));
+app.post(
+  "/api/admin/create-category",
+  authenticateToken,
+  authenticateAdminEmail,
+  CreateCategory(supabase)
+);
+app.put(
+  "/api/admin/update-category",
+  authenticateToken,
+  authenticateAdminEmail,
+  UpdateCategory(supabase)
+);
+app.delete(
+  "/api/admin/delete-category",
+  authenticateToken,
+  authenticateAdminEmail,
+  DeleteCategory(supabase)
+);
 
 //food list
 app.get("/api/fetch-foods/:category_id", FetchFoods(supabase));
 app.get("/api/fetch-specific-food/:id", FetchSpecificFood(supabase));
-app.post("/api/admin/create-food", CreateFood(supabase));
-app.put("/api/admin/update-food", UpdateFood(supabase));
-app.delete("/api/admin/delete-food", DeleteFood(supabase));
+app.post(
+  "/api/admin/create-food",
+  authenticateToken,
+  authenticateAdminEmail,
+  CreateFood(supabase)
+);
+app.put(
+  "/api/admin/update-food",
+  authenticateToken,
+  authenticateAdminEmail,
+  UpdateFood(supabase)
+);
+app.delete(
+  "/api/admin/delete-food",
+  authenticateToken,
+  authenticateAdminEmail,
+  DeleteFood(supabase)
+);
 
 //batch list
 app.get("/api/get-batch-list", authenticateToken, GetBatchList(supabase));
@@ -200,7 +264,7 @@ app.get(
   GetSpecificCartItem(supabase)
 );
 app.post("/api/add-to-cart", authenticateToken, AddToCart(supabase));
-app.put("/api/update-cart", authenticateToken, UpdateCart(supabase));
+app.put("/api/update-quantity", authenticateToken, QuantityUpdate(supabase));
 app.delete(
   "/api/delete-item-in-cart",
   authenticateToken,

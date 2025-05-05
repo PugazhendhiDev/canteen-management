@@ -28,6 +28,48 @@ function Cart() {
     fetchFoodItems();
   }, []);
 
+  async function handleQuantityUpdate(id, food_id, quantity, updateMethod) {
+    try {
+      let newQuantity = updateMethod === "Increment" ? quantity + 1 : quantity - 1;  
+
+      if (newQuantity === 0) {
+        setValue((prev) => prev.filter((item) => item.id !== id));
+  
+        try {
+          const response = await axiosInstance.delete("/api/delete-item-in-cart", {
+            data: { food_id },
+          });
+  
+          if (response) {
+            toast.success(String(response.data.message));
+          }
+        } catch (err) {
+          toast.error("Failed to remove item");
+        }
+  
+        return;
+      }  
+
+      setValue((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, quantity: newQuantity } : item
+        )
+      );  
+
+      const response = await axiosInstance.put("/api/update-quantity", {
+        id,
+        quantity: newQuantity,
+        updateMethod,
+      });
+  
+      if (response) {
+        toast.success("Quantity updated");
+      }
+    } catch (err) {
+      toast.error("Error updating cart");
+    }
+  }  
+
   return (
     <div className="page-wrapper">
       <ToastContainer />
@@ -61,6 +103,35 @@ function Cart() {
                       : value.food_list.name}
                   </p>
                 </Link>
+                <div className="margin-top-20 flex-col">
+                  <button
+                    className="cart-quantity-button"
+                    onClick={() =>
+                      handleQuantityUpdate(
+                        value.id,
+                        value.food_list.id,
+                        value.quantity,
+                        "Decrement"
+                      )
+                    }
+                  >
+                    -
+                  </button>
+                  <p>{value.quantity}</p>
+                  <button
+                    className="cart-quantity-button"
+                    onClick={() =>
+                      handleQuantityUpdate(
+                        value.id,
+                        value.food_list.id,
+                        value.quantity,
+                        "Increment"
+                      )
+                    }
+                  >
+                    +
+                  </button>
+                </div>
               </div>
             ))}
           </div>

@@ -1,15 +1,19 @@
 const express = require("express");
 const router = express.Router();
 
-function UpdateCart(supabase) {
-  router.put("/api/update-cart", async (req, res) => {
-    const { quantity, id } = req.body;
+function QuantityUpdate(supabase) {
+  router.put("/api/update-quantity", async (req, res) => {
+    const { id, quantity } = req.body;
+
+    if (quantity < 1) {
+      res.status(500).json({ error: "Internal server error" });
+    }
 
     try {
       const { data, error } = await supabase
         .from("cart")
-        .update({ quantity })
-        .eq("uid", uid)
+        .update({ quantity: quantity })
+        .eq("uid", req.uid)
         .eq("id", id)
         .select();
 
@@ -28,4 +32,4 @@ function UpdateCart(supabase) {
   return router;
 }
 
-module.exports = UpdateCart;
+module.exports = QuantityUpdate;

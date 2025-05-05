@@ -122,6 +122,22 @@
   color: var(--secondary-color);
 }
 
+.flex-col {
+  display: flex;
+  gap: 20px;
+}
+
+.cart-quantity-button {
+  background-color: var(--form-bg-btn-color);
+  color: var(--form-btn-color);
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  width: 50px;
+}
+
 .highlight-container {
   display: flex;
   flex-direction: row;

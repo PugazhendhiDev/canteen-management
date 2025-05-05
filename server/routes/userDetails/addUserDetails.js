@@ -1,16 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-function AddUserDetails(admin, supabase) {
+function AddUserDetails(supabase) {
   router.post("/api/add-user-details", async (req, res) => {
-
     try {
-      const decodedToken = await admin.auth().verifyIdToken(req.token);
-      const { uid, email } = decodedToken;
-
       const { data, error } = await supabase
         .from("user_data")
-        .insert([{ email, uid }])
+        .insert([{ email: req.email, uid: req.uid }])
         .select();
 
       if (error) return res.status(500).json({ error: error.message });

@@ -1,17 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-function GetUserDetails(admin, supabase) {
+function GetUserDetails(supabase) {
   router.get("/api/get-user-details", async (req, res) => {
     try {
-      const decodedToken = await admin.auth().verifyIdToken(req.token);
-      const { uid, email } = decodedToken;
-
       const { data, error } = await supabase
         .from("user_data")
         .select("*")
-        .eq("uid", uid)
-        .eq("email", email)
+        .eq("uid", req.uid)
+        .eq("email", req.email)
         .maybeSingle();
 
       if (error) return res.status(500).json({ error: error.message });
