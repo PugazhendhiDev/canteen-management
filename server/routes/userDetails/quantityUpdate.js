@@ -6,7 +6,7 @@ function QuantityUpdate(supabase) {
     const { id, quantity } = req.body;
 
     if (quantity < 1) {
-      res.status(500).json({ error: "Internal server error" });
+      return res.status(500).json({ error: "Quantity is less than 1" });
     }
 
     try {
