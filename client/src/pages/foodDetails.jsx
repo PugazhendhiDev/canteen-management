@@ -113,14 +113,14 @@ function FoodDetails() {
             <div className="highlight-normal">Quantity: {value.quantity}</div>
             <div className="highlight-normal">Price: {value.rate}</div>
             <div
-              className="highlight-normal"
+              className="highlight-normal cursor-pointer"
               onClick={() => {
                 isItemInCart ? removeFromCart(value.id) : addToCart(value.id);
               }}
             >
               {isItemInCart ? "Remove from cart" : "Add to cart"}
             </div>
-            <div className="highlight-unique">Buy</div>
+            <div className="highlight-unique cursor-pointer">Buy</div>
           </div>
         </div>
       </div>

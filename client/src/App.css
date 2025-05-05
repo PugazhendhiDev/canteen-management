@@ -138,6 +138,10 @@
   width: 50px;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .highlight-container {
   display: flex;
   flex-direction: row;
