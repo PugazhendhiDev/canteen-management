@@ -142,6 +142,10 @@
   cursor: pointer;
 }
 
+.text-center {
+  text-align: left;
+}
+
 .highlight-container {
   display: flex;
   flex-direction: row;

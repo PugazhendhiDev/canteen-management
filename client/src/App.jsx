@@ -18,6 +18,7 @@ import EditProfile from "./pages/editProfile";
 import SettingsPage from "./pages/settingsPage";
 import Cart from "./pages/cart";
 import BuyingPage from "./pages/buyingPage";
+import OrderHistory from "./pages/orderHistory";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -184,6 +185,16 @@ function App() {
         element={
           user && user.emailVerified ? (
             <BuyingPage />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+      <Route
+        path="/order-history"
+        element={
+          user && user.emailVerified ? (
+            <OrderHistory />
           ) : (
             <Navigate to="/" replace />
           )

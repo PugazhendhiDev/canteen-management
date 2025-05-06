@@ -34,9 +34,10 @@ const GetCartItems = require("./routes/userDetails/getCartItems");
 const GetSpecificCartItem = require("./routes/userDetails/getSpecificCartItem");
 const AddToCart = require("./routes/userDetails/addToCart");
 const QuantityUpdate = require("./routes/userDetails/quantityUpdate");
+const GetQuantityOfSpecificFood = require("./routes/userDetails/getQuantityofSpecificFood");
 const DeleteCartItem = require("./routes/userDetails/deleteCartItem");
 const Order = require("./routes/orders/order");
-const GetQuantityOfSpecificFood = require("./routes/userDetails/getQuantityofSpecificFood");
+const GetOrderHistory = require("./routes/orders/getOrderHistory");
 
 dotenv.config();
 
@@ -290,6 +291,7 @@ app.delete(
   DeleteCartItem(supabase)
 );
 
+app.get("/api/get-order-history", authenticateToken, GetOrderHistory(supabase));
 app.post("/api/order", authenticateToken, Order(supabase));
 
 io.on("connection", (socket) => {

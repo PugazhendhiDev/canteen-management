@@ -6,6 +6,7 @@ import axiosInstance from "../configuration/axios";
 import Logo from "../assets/logo.jpeg";
 import ProfileIcon from "../assets/icons/profileIcon";
 import CartIcon from "../assets/cards/cartIcon";
+import HistoryIcon from "../assets/cards/historyIcon";
 
 function Home() {
   const [value, setValue] = useState([]);
@@ -67,6 +68,12 @@ function Home() {
                 <CartIcon />
               </div>
               <p>Cart</p>
+            </Link>
+            <Link className="page-card" to="/order-history">
+              <div className="page-card-img">
+                <HistoryIcon />
+              </div>
+              <p>Orders</p>
             </Link>
           </div>
           <h2>CATEGORY</h2>

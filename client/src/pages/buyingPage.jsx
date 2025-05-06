@@ -10,47 +10,57 @@ function BuyingPage() {
   const [displayItems, setDisplayItems] = useState([]);
   const [price, setPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
+  const [flag, setFlag] = useState(true);
 
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (location.state) {
-      const [data, { fromCart }] = location.state;
-      let totalPrice = 0;
-      let totalQuantity = 0;
-      let items = [];
-
-      if (fromCart) {
-        items = data.map((item) => {
-          totalPrice += item.food_list.rate * item.quantity;
-          totalQuantity += item.quantity;
-          return {
-            image_link: item.food_list.image_link,
-            name: item.food_list.name,
-            rate: item.food_list.rate,
-            quantity: item.quantity,
-            id: item.food_list.id,
-          };
-        });
-      } else {
-        items = [
-          {
-            image_link: data.image_link,
-            name: data.name,
-            rate: data.rate,
-            quantity: data.quantity,
-            id: data.id,
-          },
-        ];
-        totalPrice = data.rate;
-        totalQuantity = data.quantity;
-      }
-
-      setDisplayItems(items);
-      setPrice(totalPrice);
-      setQuantity(totalQuantity);
+    if (!location.state) {
+      setFlag(false);
+      toast.error("Invalid access to buying page", {
+        onClose: () => {
+          navigate("/");
+        },
+      });
+      return;
     }
+
+    const [data, { fromCart }] = location.state;
+
+    let totalPrice = 0;
+    let totalQuantity = 0;
+    let items = [];
+
+    if (fromCart) {
+      items = data.map((item) => {
+        totalPrice += item.food_list.rate * item.quantity;
+        totalQuantity += item.quantity;
+        return {
+          image_link: item.food_list.image_link,
+          name: item.food_list.name,
+          rate: item.food_list.rate,
+          quantity: item.quantity,
+          id: item.food_list.id,
+        };
+      });
+    } else {
+      items = [
+        {
+          image_link: data.image_link,
+          name: data.name,
+          rate: data.rate,
+          quantity: data.quantity,
+          id: data.id,
+        },
+      ];
+      totalPrice = data.rate;
+      totalQuantity = data.quantity;
+    }
+
+    setDisplayItems(items);
+    setPrice(totalPrice);
+    setQuantity(totalQuantity);
   }, [location.state]);
 
   const handleOrder = async () => {
@@ -103,16 +113,18 @@ function BuyingPage() {
                 </div>
               </div>
             ))}
-            <div className="highlight-container">
-              <div className="highlight-normal">Quantity: {quantity}</div>
-              <div className="highlight-normal">Price: {price}</div>
-              <div
-                className="highlight-unique cursor-pointer"
-                onClick={handleOrder}
-              >
-                Buy
+            {flag && (
+              <div className="highlight-container">
+                <div className="highlight-normal">Quantity: {quantity}</div>
+                <div className="highlight-normal">Price: {price}</div>
+                <div
+                  className="highlight-unique cursor-pointer"
+                  onClick={handleOrder}
+                >
+                  Buy
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
