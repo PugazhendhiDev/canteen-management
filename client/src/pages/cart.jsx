@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./pages.css";
 import Logo from "../assets/logo.jpeg";
 import ProfileIcon from "../assets/icons/profileIcon";
@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 function Cart() {
   const [value, setValue] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchFoodItems() {
@@ -30,45 +31,55 @@ function Cart() {
 
   async function handleQuantityUpdate(id, food_id, quantity, updateMethod) {
     try {
-      let newQuantity = updateMethod === "Increment" ? quantity + 1 : quantity - 1;  
+      let newQuantity =
+        updateMethod === "Increment" ? quantity + 1 : quantity - 1;
 
       if (newQuantity === 0) {
         setValue((prev) => prev.filter((item) => item.id !== id));
-  
+
         try {
-          const response = await axiosInstance.delete("/api/delete-item-in-cart", {
-            data: { food_id },
-          });
-  
+          const response = await axiosInstance.delete(
+            "/api/delete-item-in-cart",
+            {
+              data: { food_id },
+            }
+          );
+
           if (response) {
             toast.success(String(response.data.message));
           }
         } catch (err) {
           toast.error("Failed to remove item");
         }
-  
+
         return;
-      }  
+      }
 
       setValue((prev) =>
         prev.map((item) =>
           item.id === id ? { ...item, quantity: newQuantity } : item
         )
-      );  
+      );
 
       const response = await axiosInstance.put("/api/update-quantity", {
         id,
         quantity: newQuantity,
         updateMethod,
       });
-  
+
       if (response) {
         toast.success("Quantity updated");
       }
     } catch (err) {
       toast.error("Error updating cart");
     }
-  }  
+  }
+
+  function handleBuying() {
+    navigate("/buying", {
+      state: [value, { fromCart: true }],
+    });
+  }
 
   return (
     <div className="page-wrapper">
@@ -94,7 +105,7 @@ function Cart() {
               <div className="page-card-wrapper" key={index}>
                 <Link
                   className="page-card"
-                  to={`/food-details/${value.food_list.id}`}
+                  to={`/food-details/${value.food_categories.id}/${value.food_list.id}`}
                 >
                   <img src={value.food_list.image_link} loading="lazy" />
                   <p>
@@ -134,6 +145,19 @@ function Cart() {
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="highlight-container margin-top-20">
+            {value.length > 0 ? (
+              <div
+                className="highlight-unique cursor-pointer"
+                onClick={handleBuying}
+              >
+                Buy
+              </div>
+            ) : (
+              <p>Cart is empty</p>
+            )}
           </div>
         </div>
       </div>

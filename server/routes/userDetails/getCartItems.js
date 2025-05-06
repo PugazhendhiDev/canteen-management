@@ -16,7 +16,9 @@ function GetCartItems(supabase) {
             rate,
             quantity,
             image_link
-          )`
+          ),
+          food_categories (
+          id)`
         )
         .eq("uid", req.uid);
 

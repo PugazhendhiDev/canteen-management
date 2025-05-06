@@ -17,6 +17,7 @@ import FoodDetails from "./pages/foodDetails";
 import EditProfile from "./pages/editProfile";
 import SettingsPage from "./pages/settingsPage";
 import Cart from "./pages/cart";
+import BuyingPage from "./pages/buyingPage";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -163,7 +164,7 @@ function App() {
         }
       />
       <Route
-        path="/food-details/:id"
+        path="/food-details/:category_id/:id"
         element={
           user && user.emailVerified ? (
             <FoodDetails />
@@ -176,6 +177,16 @@ function App() {
         path="/cart"
         element={
           user && user.emailVerified ? <Cart /> : <Navigate to="/" replace />
+        }
+      />
+      <Route
+        path="/buying"
+        element={
+          user && user.emailVerified ? (
+            <BuyingPage />
+          ) : (
+            <Navigate to="/" replace />
+          )
         }
       />
     </Routes>

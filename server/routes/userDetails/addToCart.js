@@ -3,11 +3,11 @@ const router = express.Router();
 
 function AddToCart(supabase) {
   router.post("/api/add-to-cart", async (req, res) => {
-    const { quantity, food_id } = req.body;
+    const { quantity, food_id, category_id } = req.body;
     try {
       const { data, error } = await supabase
         .from("cart")
-        .insert([{ uid: req.uid, quantity, food_id }])
+        .insert([{ uid: req.uid, quantity, food_id, category_id }])
         .select();
 
       if (error) return res.status(500).json({ error: error.message });

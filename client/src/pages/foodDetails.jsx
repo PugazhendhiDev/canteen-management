@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "./pages.css";
 import Logo from "../assets/logo.jpeg";
 import ProfileIcon from "../assets/icons/profileIcon";
 import axiosInstance from "../configuration/axios";
+import { io } from "socket.io-client";
 import { ToastContainer, toast } from "react-toastify";
 
 function FoodDetails() {
   const id = useParams();
+  const navigate = useNavigate();
   const [value, setValue] = useState({
     name: "",
     image_link: "",
@@ -16,6 +18,36 @@ function FoodDetails() {
     quantity: "",
   });
   const [isItemInCart, setIsItemInCart] = useState(false);
+
+  const socket = io(import.meta.env.VITE_BACKEND_URL);
+  useEffect(() => {
+    socket.on("food_quantity_update", (payload) => {
+      if (sessionStorage.getItem(`food-items-${id.category_id}`)) {
+        const data = JSON.parse(
+          sessionStorage.getItem(`food-items-${id.category_id}`)
+        );
+        const updatedItems = data.map((foodItem) =>
+          foodItem && foodItem.id === payload.id
+            ? { ...foodItem, quantity: payload.quantity }
+            : foodItem
+        );
+
+        sessionStorage.setItem(
+          `food-items-${id.category_id}`,
+          JSON.stringify(updatedItems)
+        );
+      }
+      setValue((prev) =>
+        prev && prev.id === payload.id
+          ? { ...prev, quantity: payload.quantity }
+          : prev
+      );
+    });
+
+    return () => {
+      socket.off("food_quantity_update");
+    };
+  }, []);
 
   useEffect(() => {
     async function fetchFood() {
@@ -45,19 +77,49 @@ function FoodDetails() {
       }
     }
 
-    if (sessionStorage.getItem(`food-items-${id.id}`)) {
-      const data = JSON.parse(sessionStorage.getItem(`food-items-${id.id}`));
-      setValue(data.find((obj) => obj.id == id.id));
-      fetchCartItem();
+    if (sessionStorage.getItem(`food-items-${id.category_id}`)) {
+      const data = JSON.parse(
+        sessionStorage.getItem(`food-items-${id.category_id}`)
+      );
+      const item = data.find((obj) => obj.id == id.id);
+
+      async function fetchQuantity() {
+        try {
+          const response = await axiosInstance.get(
+            `/api/get-quantity-of-specific-food/${id.id}`
+          );
+          const quantity = response.data.data.quantity;
+
+          item.quantity = quantity;
+
+          setValue(item);
+
+          const updatedItems = data.map((foodItem) =>
+            foodItem.id === id.id
+              ? { ...foodItem, quantity: item.quantity }
+              : foodItem
+          );
+
+          sessionStorage.setItem(
+            `food-items-${id.category_id}`,
+            JSON.stringify(updatedItems)
+          );
+        } catch (err) {
+          console.error("Error fetching quantity", err);
+        }
+      }
+
+      fetchQuantity();
     } else {
       fetchFood();
     }
   }, []);
 
-  async function addToCart(id) {
+  async function addToCart(id, category_id) {
     try {
       const response = await axiosInstance.post("/api/add-to-cart", {
         food_id: id,
+        category_id: category_id,
         quantity: 1,
       });
 
@@ -87,6 +149,21 @@ function FoodDetails() {
     }
   }
 
+  function handleBuying() {
+    navigate("/buying", {
+      state: [
+        {
+          name: value.name,
+          image_link: value.image_link,
+          rate: value.rate,
+          quantity: 1,
+          id: value.id,
+        },
+        { fromCart: false },
+      ],
+    });
+  }
+
   return (
     <div className="page-wrapper">
       <ToastContainer />
@@ -110,17 +187,26 @@ function FoodDetails() {
           <h2>{value.name}</h2>
           <p>{value.description}</p>
           <div className="highlight-container">
-            <div className="highlight-normal">Quantity: {value.quantity}</div>
+            {value.quantity && (
+              <div className="highlight-normal">Quantity: {value.quantity}</div>
+            )}
             <div className="highlight-normal">Price: {value.rate}</div>
             <div
               className="highlight-normal cursor-pointer"
               onClick={() => {
-                isItemInCart ? removeFromCart(value.id) : addToCart(value.id);
+                isItemInCart
+                  ? removeFromCart(value.id)
+                  : addToCart(value.id, value.category_id);
               }}
             >
               {isItemInCart ? "Remove from cart" : "Add to cart"}
             </div>
-            <div className="highlight-unique cursor-pointer">Buy</div>
+            <div
+              className="highlight-unique cursor-pointer"
+              onClick={handleBuying}
+            >
+              Buy
+            </div>
           </div>
         </div>
       </div>

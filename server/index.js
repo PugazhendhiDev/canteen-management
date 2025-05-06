@@ -6,6 +6,8 @@ const cors = require("cors");
 const admin = require("firebase-admin");
 const dotenv = require("dotenv");
 const { createClient } = require("@supabase/supabase-js");
+const http = require("http");
+const { Server } = require("socket.io");
 const Logout = require("./routes/auth/logout");
 const AddUserDetails = require("./routes/userDetails/addUserDetails");
 const GetUserDetails = require("./routes/userDetails/getUserDetails");
@@ -33,6 +35,8 @@ const GetSpecificCartItem = require("./routes/userDetails/getSpecificCartItem");
 const AddToCart = require("./routes/userDetails/addToCart");
 const QuantityUpdate = require("./routes/userDetails/quantityUpdate");
 const DeleteCartItem = require("./routes/userDetails/deleteCartItem");
+const Order = require("./routes/orders/order");
+const GetQuantityOfSpecificFood = require("./routes/userDetails/getQuantityofSpecificFood");
 
 dotenv.config();
 
@@ -48,6 +52,16 @@ admin.initializeApp({
 });
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: [
+      process.env.ADMIN_APP_URL,
+      process.env.FRONTEND_URL,
+      "http://192.168.21.152:5000",
+    ],
+  },
+});
 
 const corsOptions = {
   origin: [
@@ -263,6 +277,11 @@ app.get(
   authenticateToken,
   GetSpecificCartItem(supabase)
 );
+app.get(
+  "/api/get-quantity-of-specific-food/:id",
+  authenticateToken,
+  GetQuantityOfSpecificFood(supabase)
+);
 app.post("/api/add-to-cart", authenticateToken, AddToCart(supabase));
 app.put("/api/update-quantity", authenticateToken, QuantityUpdate(supabase));
 app.delete(
@@ -271,8 +290,32 @@ app.delete(
   DeleteCartItem(supabase)
 );
 
+app.post("/api/order", authenticateToken, Order(supabase));
+
+io.on("connection", (socket) => {
+  console.log("Client connected:", socket.id);
+});
+
+supabase
+  .channel("realtime:food_list")
+  .on(
+    "postgres_changes",
+    {
+      event: "UPDATE",
+      schema: "public",
+      table: "food_list",
+    },
+    (payload) => {
+      const id = payload.new.id;
+      const quantity = payload.new.quantity;
+
+      io.emit("food_quantity_update", { id, quantity });
+    }
+  )
+  .subscribe();
+
 const PORT = process.env.PORT || 3001;
 
-app.listen(PORT, "0.0.0.0", () => {
+server.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on http://0.0.0.0:${PORT}`);
 });
