@@ -183,12 +183,20 @@ function FoodDetails() {
       <div className="page-container">
         <div className="page-body">
           <h2>FOOD DETAILS</h2>
-          {value.image_link && <img src={value.image_link} loading="lazy" />}
+          {value.image_link && (
+            <img
+              className="page-card-img"
+              src={value.image_link}
+              loading="lazy"
+            />
+          )}
           <h2>{value.name}</h2>
           <p>{value.description}</p>
           <div className="highlight-container">
             {value.quantity && (
-              <div className="highlight-normal">Quantity: {value.quantity}</div>
+              <div className="highlight-normal">
+                Available: {value.quantity}
+              </div>
             )}
             <div className="highlight-normal">Price: {value.rate}</div>
             <div

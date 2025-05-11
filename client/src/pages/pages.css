@@ -174,18 +174,19 @@
   text-decoration: none;
   color: var(--text-color);
   transition: all 0.3s ease-in-out;
+  position: relative;
 }
 
 .page-card:hover {
   transform: scale(1.05);
 }
 
-.page-card-img,
-img {
+.page-card-img {
   width: 200px;
   height: 200px;
   border-radius: 20px;
   background-color: var(--primary-color);
+  object-fit: cover;
 }
 
 .page-profile {
@@ -216,7 +217,20 @@ img {
 }
 
 .delete-btn {
-  background-color: red;
+  background-color: var(--primary-color);
+}
+
+.page-card p {
+  margin-top: 5px;
+}
+
+.page-rate {
+  position: absolute;
+  background-color: var(--background-color);
+  padding: 5px 20px;
+  border-radius: 20px;
+  bottom: 60px;
+  left: 15px;
 }
 
 @media (max-width: 1024px) {

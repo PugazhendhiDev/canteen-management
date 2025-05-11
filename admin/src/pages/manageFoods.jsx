@@ -68,7 +68,11 @@ function ManageFoods() {
             {value.map((value, index) => (
               <div className="page-card-wrapper" key={index}>
                 <Link className="page-card" to={`/food-management/${value.id}`}>
-                  <img src={value.image_link} loading="lazy" />
+                  <img
+                    className="page-card-img"
+                    src={value.image_link}
+                    loading="lazy"
+                  />
                   <p>
                     {value.category.length > 20
                       ? `${value.category.slice(0, 20)}...`
