@@ -56,6 +56,8 @@ function OrderHistory() {
                     </li>
                   ))}
                 </ul>
+                <h3>{order.isDelivered ? "Received" : "Not Received"}</h3>
+                <hr></hr>
               </div>
             ))}
           </div>
