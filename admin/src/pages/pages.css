@@ -229,8 +229,9 @@
   background-color: var(--background-color);
   padding: 5px 20px;
   border-radius: 20px;
-  bottom: 60px;
-  left: 15px;
+  bottom: 55px;
+  left: 10px;
+  opacity: 0.8;
 }
 
 @media (max-width: 1024px) {
