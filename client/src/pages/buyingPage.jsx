@@ -104,7 +104,11 @@ function BuyingPage() {
             {displayItems.map((item, index) => (
               <div className="page-card-wrapper" key={index}>
                 <div className="page-card">
-                  <img src={item.image_link} loading="lazy" />
+                  <img
+                    className="page-card-img"
+                    src={item.image_link}
+                    loading="lazy"
+                  />
                   <p>
                     {item.name.length > 20
                       ? `${item.name.slice(0, 20)}...`
