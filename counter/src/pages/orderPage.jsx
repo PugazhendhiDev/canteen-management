@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "./pages.css";
 import Logo from "../assets/logo.jpeg";
 import ProfileIcon from "../assets/icons/profileIcon";
 import axiosInstance from "../configuration/axios";
 import { ToastContainer, toast } from "react-toastify";
-import { auth } from "../configuration/firebase";
-import { QRCodeSVG } from "qrcode.react";
-import CryptoJS from "crypto-js";
 
-function OrderHistory() {
+function OrderPage() {
   const [value, setValue] = useState([]);
-  const [encryptedUID, setEncryptedUID] = useState(null);
+
+  const { id } = useParams();
 
   useEffect(() => {
     async function fetchOrderHistory() {
       try {
-        const response = await axiosInstance.get("/api/get-order-history");
+        const response = await axiosInstance.get(`/api/get-user-order/${id}`);
 
         if (response?.data?.data) {
           setValue(response.data.data);
@@ -26,17 +24,24 @@ function OrderHistory() {
       }
     }
 
-    const userUID = auth.currentUser.uid;
-
-    const encryptedUID = CryptoJS.AES.encrypt(
-      userUID,
-      import.meta.env.VITE_EMAIL_ENCRYPTION_SECRET_KEY
-    ).toString();
-
-    setEncryptedUID(encryptedUID);
-
     fetchOrderHistory();
   }, []);
+
+  async function handleDeliver(orderId) {
+    try {
+      const res = await axiosInstance.put("/api/update-delivery-status", {
+        id: orderId,
+      });
+
+      setValue((prevOrders) =>
+        prevOrders.filter((order) => order.id !== orderId)
+      );
+
+      toast.success("Order delivered");
+    } catch (err) {
+      toast.error("Failed to update delivery status");
+    }
+  }
 
   return (
     <div className="page-wrapper">
@@ -57,7 +62,6 @@ function OrderHistory() {
       <div className="page-container">
         <div className="page-body">
           <h2>Order History</h2>
-          {encryptedUID && <QRCodeSVG value={encryptedUID} />}
           <div className="text-center">
             {[...value].reverse().map((order, index) => (
               <div key={index}>
@@ -70,7 +74,14 @@ function OrderHistory() {
                     </li>
                   ))}
                 </ul>
-                <h3>{order.isDelivered ? "Received" : "Not Received"}</h3>
+                <div className="btn">
+                  <button
+                    className="delivery-btn"
+                    onClick={() => handleDeliver(order.id)}
+                  >
+                    Deliver
+                  </button>
+                </div>
                 <hr></hr>
               </div>
             ))}
@@ -81,4 +92,4 @@ function OrderHistory() {
   );
 }
 
-export default OrderHistory;
+export default OrderPage;

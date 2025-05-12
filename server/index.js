@@ -38,6 +38,8 @@ const GetQuantityOfSpecificFood = require("./routes/userDetails/getQuantityofSpe
 const DeleteCartItem = require("./routes/userDetails/deleteCartItem");
 const Order = require("./routes/orders/order");
 const GetOrderHistory = require("./routes/orders/getOrderHistory");
+const GetUserOrder = require("./routes/orders/getUserOrder");
+const UpdateDeliveryStatus = require("./routes/orders/updateDeliveryStatus");
 
 dotenv.config();
 
@@ -69,6 +71,7 @@ const corsOptions = {
     process.env.ADMIN_APP_URL,
     process.env.FRONTEND_URL,
     "http://192.168.21.152:5000",
+    "http://localhost:5173",
   ],
   credentials: true,
 };
@@ -321,6 +324,17 @@ app.delete(
 
 app.get("/api/get-order-history", authenticateToken, GetOrderHistory(supabase));
 app.post("/api/order", authenticateToken, Order(supabase));
+
+app.get(
+  "/api/get-user-order/:id",
+  authenticateToken,
+  GetUserOrder(supabase)
+);
+app.put(
+  "/api/update-delivery-status",
+  authenticateToken,
+  UpdateDeliveryStatus(supabase)
+);
 
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
