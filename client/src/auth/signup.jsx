@@ -5,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
+import axiosInstance from "../configuration/axios";
 import Logo from "../assets/logo.jpeg";
 import { ToastContainer, toast } from "react-toastify";
 import PulseLoader from "react-spinners/PulseLoader";
@@ -12,6 +13,7 @@ import PulseLoader from "react-spinners/PulseLoader";
 function Signup() {
   const [value, setValue] = useState({
     email: "",
+    roll_no: "",
     password: "",
     retypePassword: "",
   });
@@ -42,12 +44,21 @@ function Signup() {
           value.password
         );
 
-        await sendEmailVerification(userCredential.user);
+        if (userCredential) {
+          const response = await axiosInstance.post("/api/add-user-details", {
+            roll_no: value.roll_no,
+          });
+
+          if (response) {
+            await sendEmailVerification(userCredential.user);
+          }
+        }
 
         setIsSubmit(false);
 
         setValue({
           email: "",
+          roll_no: "",
           password: "",
           retypePassword: "",
         });
@@ -78,6 +89,20 @@ function Signup() {
               setValue({
                 ...value,
                 email: e.target.value,
+              })
+            }
+            required
+          />
+          <input
+            className="form-input"
+            placeholder="Enter your roll no"
+            type="number"
+            name="roll_no"
+            value={value.roll_no}
+            onChange={(e) =>
+              setValue({
+                ...value,
+                roll_no: e.target.value,
               })
             }
             required

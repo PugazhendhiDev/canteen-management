@@ -111,20 +111,6 @@ function EditProfile() {
               />
               <input
                 className="form-input"
-                placeholder="Enter your roll no"
-                type="text"
-                name="roll_no"
-                value={userData.roll_no || ""}
-                onChange={(e) =>
-                  setUserData({
-                    ...userData,
-                    roll_no: e.target.value,
-                  })
-                }
-                required
-              />
-              <input
-                className="form-input"
                 placeholder="Enter your department"
                 type="text"
                 name="dept"

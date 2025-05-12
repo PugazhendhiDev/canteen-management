@@ -8,7 +8,7 @@ function UpdateUserDetails(supabase) {
     try {
       const { data, error } = await supabase
         .from("user_data")
-        .update({ name, roll_no, dept, section, year, batch })
+        .update({ name, dept, section, year, batch })
         .eq("uid", req.uid)
         .eq("email", req.email)
         .select();

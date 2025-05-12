@@ -106,6 +106,30 @@ const authenticateToken = async (req, res, next) => {
   }
 };
 
+const authenticateUserToken = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    const idToken = authHeader.split("Bearer ")[1];
+    req.token = idToken;
+
+    admin
+      .auth()
+      .verifyIdToken(idToken)
+      .then((decodedToken) => {
+        req.uid = decodedToken.uid;
+        req.email = decodedToken.email;
+        next();
+      })
+      .catch((error) => {
+        console.error("Token verification error:", error);
+        res.status(401).json({ message: "Unauthorized" });
+      });
+  } else {
+    res.status(401).json({ message: "Unauthorized" });
+  }
+};
+
 const authenticateAdminToken = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -211,7 +235,11 @@ app.delete(
 //user details
 app.get("/api/get-user-details", authenticateToken, GetUserDetails(supabase));
 
-app.post("/api/add-user-details", authenticateToken, AddUserDetails(supabase));
+app.post(
+  "/api/add-user-details",
+  authenticateUserToken,
+  AddUserDetails(admin, supabase)
+);
 
 app.put(
   "/api/update-user-details",
