@@ -5,9 +5,13 @@ import Logo from "../assets/logo.jpeg";
 import ProfileIcon from "../assets/icons/profileIcon";
 import axiosInstance from "../configuration/axios";
 import { ToastContainer, toast } from "react-toastify";
+import { auth } from "../configuration/firebase";
+import { QRCodeSVG } from "qrcode.react";
+import CryptoJS from "crypto-js";
 
 function OrderHistory() {
   const [value, setValue] = useState([]);
+  const [encryptedEmail, setEncryptedEmail] = useState(null);
 
   useEffect(() => {
     async function fetchOrderHistory() {
@@ -21,6 +25,13 @@ function OrderHistory() {
         toast.error("Failed to fetch order history");
       }
     }
+
+    const userEmail = auth.currentUser.email;
+    const encryptedUserEmail = CryptoJS.AES.encrypt(
+      userEmail,
+      import.meta.env.VITE_EMAIL_ENCRYPTION_SECRET_KEY
+    ).toString();
+    setEncryptedEmail(encryptedUserEmail);
 
     fetchOrderHistory();
   }, []);
@@ -44,6 +55,7 @@ function OrderHistory() {
       <div className="page-container">
         <div className="page-body">
           <h2>Order History</h2>
+          {encryptedEmail && <QRCodeSVG value={encryptedEmail} />}
           <div className="text-center">
             {[...value].reverse().map((order, index) => (
               <div key={index}>
