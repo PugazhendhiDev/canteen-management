@@ -8,9 +8,11 @@ const dotenv = require("dotenv");
 const { createClient } = require("@supabase/supabase-js");
 const http = require("http");
 const { Server } = require("socket.io");
+const ResetData = require("./routes/resetData/resetData");
 const Logout = require("./routes/auth/logout");
 const AddUserDetails = require("./routes/userDetails/addUserDetails");
 const GetUserDetails = require("./routes/userDetails/getUserDetails");
+const GetUserWalletAmount = require("./routes/userDetails/getUserWalletAmount");
 const UpdateUserDetails = require("./routes/userDetails/updateUserDetails");
 const GetBatchList = require("./routes/batchList/getBatchList");
 const AccountCreation = require("./routes/accountManagement/accountCreation");
@@ -235,6 +237,9 @@ const authenticateCounterEmail = async (req, res, next) => {
   }
 };
 
+//reset
+app.get("/api/reset-data", ResetData(supabase));
+
 //auth
 app.get("/api/logout", authenticateToken, Logout());
 
@@ -280,6 +285,12 @@ app.delete(
 
 //user details
 app.get("/api/get-user-details", authenticateToken, GetUserDetails(supabase));
+
+app.get(
+  "/api/get-user-wallet-amount",
+  authenticateToken,
+  GetUserWalletAmount(supabase)
+);
 
 app.post(
   "/api/add-user-details",

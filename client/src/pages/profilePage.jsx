@@ -11,29 +11,34 @@ function ProfilePage() {
   const [userData, setUserData] = useState({});
 
   useEffect(() => {
-    const storedUserData = sessionStorage.getItem("userData");
+    const fetchData = async () => {
+      try {
+        let user = null;
+        const storedUserData = sessionStorage.getItem("userData");
 
-    if (storedUserData) {
-      setUserData(JSON.parse(storedUserData));
-    } else {
-      const fetchUser = async () => {
-        try {
-          const response = await axiosInstance.get("/api/get-user-details");
-          if (response.data.data) {
-            const user = response.data.data;
-            setUserData(user);
-
-            sessionStorage.setItem("userData", JSON.stringify(user));
-          } else {
-            setUserData({});
-          }
-        } catch (err) {
-          console.error("Error fetching user data", err);
+        if (storedUserData) {
+          user = JSON.parse(storedUserData);
+        } else {
+          const userRes = await axiosInstance.get("/api/get-user-details");
+          user = userRes.data.data || {};
         }
-      };
 
-      fetchUser();
-    }
+        const walletRes = await axiosInstance.get(
+          "/api/get-user-wallet-amount"
+        );
+        user.amount =
+          walletRes.data.data.amount !== undefined
+            ? walletRes.data.data.amount
+            : 0;
+
+        setUserData(user);
+        sessionStorage.setItem("userData", JSON.stringify(user));
+      } catch (err) {
+        console.error("Error fetching profile or wallet data", err);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
@@ -60,7 +65,7 @@ function ProfilePage() {
             <EditIcon />
           </Link>
           <h2>{userData.name || "Name"}</h2>
-          <h2>₹{userData.amount || "Amount"}</h2>
+          <h2>₹{userData.amount ?? "Loading..."}</h2>
           <p>{userData.roll_no || "Roll no"}</p>
           <p>Department: {userData.dept || "Department"}</p>
           <p>Section: {userData.section || "Section"}</p>
