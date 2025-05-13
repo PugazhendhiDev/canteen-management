@@ -224,14 +224,39 @@
   margin-top: 5px;
 }
 
-.page-rate {
+.page-minimal-info {
   position: absolute;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  bottom: 55px;
+}
+
+.page-rate {
   background-color: var(--background-color);
   padding: 5px 20px;
   border-radius: 20px;
-  bottom: 55px;
-  left: 10px;
   opacity: 0.8;
+  margin-left: 10px;
+}
+
+.page-quantity-available {
+  width: 20px;
+  height: 20px;
+  background-color: greenyellow;
+  border-radius: 50%;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.page-quantity-not-available {
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  border-radius: 50%;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 @media (max-width: 1024px) {

@@ -75,7 +75,16 @@ function ManageFoodItems() {
                     src={value.image_link}
                     loading="lazy"
                   />
-                  <p className="page-rate">Price: {value.rate}</p>
+                  <div className="page-minimal-info">
+                    <p className="page-rate">Price: {value.rate}</p>
+                    <div
+                      className={
+                        value.quantity > 0
+                          ? "page-quantity-available"
+                          : "page-quantity-not-available"
+                      }
+                    ></div>
+                  </div>
                   <p>
                     {value.name.length > 20
                       ? `${value.name.slice(0, 20)}...`

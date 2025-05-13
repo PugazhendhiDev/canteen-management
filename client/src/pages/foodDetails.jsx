@@ -205,12 +205,8 @@ function FoodDetails() {
           <h2>{value.name}</h2>
           <p>{value.description}</p>
           <div className="highlight-container">
-            {value.quantity >= 0 && (
-              <div className="highlight-normal">
-                Available: {value.quantity}
-              </div>
-            )}
-            <div className="highlight-normal">Price: {value.rate}</div>
+            <div className="highlight-normal">Available: {value.quantity}</div>
+            <div className="highlight-unique">Price: {value.rate}</div>
             {cartBtnClicked === true ? (
               <div className="highlight-normal cursor-pointer">
                 <PulseLoader
