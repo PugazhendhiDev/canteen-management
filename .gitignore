@@ -6,6 +6,10 @@ node_modules
 admin/node_modules/
 admin/.env
 
+# Ignore counter-specific
+counter/node_modules/
+counter/.env
+
 # Ignore client-specific
 client/node_modules/
 client/.env
