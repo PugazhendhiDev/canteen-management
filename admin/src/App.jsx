@@ -23,7 +23,7 @@ import ManageFoodItems from "./pages/manageFoodItems";
 import CreateFood from "./pages/createFood";
 import EditFood from "./pages/editFood";
 import FoodDetails from "./pages/foodDetails";
-import UserQrScanner from "./pages/userQRScanner";
+import UserQrScanner from "./pages/userQrScanner";
 import EditUserWallet from "./pages/editUserWallet";
 
 function App() {
