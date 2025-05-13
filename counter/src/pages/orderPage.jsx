@@ -9,8 +9,13 @@ import { PulseLoader } from "react-spinners";
 
 function OrderPage() {
   const [value, setValue] = useState([]);
+  const [submit, setSubmit] = useState(null);
 
   const { id } = useParams();
+
+  const loaderColor = getComputedStyle(document.documentElement)
+    .getPropertyValue("--loader-color")
+    .trim();
 
   useEffect(() => {
     async function fetchOrderHistory() {
@@ -28,7 +33,8 @@ function OrderPage() {
     fetchOrderHistory();
   }, []);
 
-  async function handleDeliver(orderId) {
+  async function handleDeliver(orderId, btnId) {
+    setSubmit(btnId);
     try {
       const res = await axiosInstance.put("/api/update-delivery-status", {
         id: orderId,
@@ -38,8 +44,13 @@ function OrderPage() {
         prevOrders.filter((order) => order.id !== orderId)
       );
 
-      toast.success("Order delivered");
+      setSubmit(null);
+
+      if (res) {
+        toast.success("Order delivered");
+      }
     } catch (err) {
+      setSubmit(null);
       toast.error("Failed to update delivery status");
     }
   }
@@ -65,33 +76,49 @@ function OrderPage() {
           <h2>Counter</h2>
           <h2>Order History</h2>
           <div className="text-center">
-            {value.length === 0 ? <PulseLoader
-              size={10}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            /> : <>{[...value].reverse().map((order, index) => (
-              <div key={index}>
-                <h3>Order #{value.length - index}</h3>
-                <ul>
-                  {order.food.map((item, i) => (
-                    <li key={i}>
-                      {item.name} x{item.quantity} - ₹
-                      {item.quantity * item.rate}
-                    </li>
-                  ))}
-                </ul>
-                <div className="btn">
-                  <button
-                    className="delivery-btn"
-                    onClick={() => handleDeliver(order.id)}
-                  >
-                    Deliver
-                  </button>
-                </div>
-                <hr></hr>
-              </div>
-            ))}</>
-            }
+            {value.length === 0 ? (
+              <PulseLoader
+                size={10}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            ) : (
+              <>
+                {[...value].reverse().map((order, index) => (
+                  <div key={index}>
+                    <h3>Order #{value.length - index}</h3>
+                    <ul>
+                      {order.food.map((item, i) => (
+                        <li key={i}>
+                          {item.name} x{item.quantity} - ₹
+                          {item.quantity * item.rate}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="btn">
+                      {submit === index ? (
+                        <button className="delivery-btn">
+                          <PulseLoader
+                            size={5}
+                            aria-label="Loading Spinner"
+                            data-testid="loader"
+                            color={loaderColor}
+                          />
+                        </button>
+                      ) : (
+                        <button
+                          className="delivery-btn"
+                          onClick={() => handleDeliver(order.id, index)}
+                        >
+                          Deliver
+                        </button>
+                      )}
+                    </div>
+                    <hr></hr>
+                  </div>
+                ))}
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -5,12 +5,18 @@ import Logo from "../assets/logo.jpeg";
 import ProfileIcon from "../assets/icons/profileIcon";
 import axiosInstance from "../configuration/axios";
 import { ToastContainer, toast } from "react-toastify";
+import { PulseLoader } from "react-spinners";
 
 function BuyingPage() {
   const [displayItems, setDisplayItems] = useState([]);
   const [price, setPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
   const [flag, setFlag] = useState(true);
+  const [buy, setBuy] = useState(false);
+
+  const loaderColor = getComputedStyle(document.documentElement)
+    .getPropertyValue("--loader-color")
+    .trim();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -64,6 +70,7 @@ function BuyingPage() {
   }, [location.state]);
 
   const handleOrder = async () => {
+    setBuy(true);
     try {
       const res = await axiosInstance.post("/api/order", {
         displayItems,
@@ -75,7 +82,9 @@ function BuyingPage() {
           },
         });
       }
+      setBuy(false);
     } catch (err) {
+      setBuy(false);
       toast.error("Failed to place order");
       console.error(err);
     }
@@ -121,12 +130,23 @@ function BuyingPage() {
               <div className="highlight-container">
                 <div className="highlight-normal">Quantity: {quantity}</div>
                 <div className="highlight-normal">Price: {price}</div>
-                <div
-                  className="highlight-unique cursor-pointer"
-                  onClick={handleOrder}
-                >
-                  Buy
-                </div>
+                {buy === true ? (
+                  <div className="highlight-unique cursor-pointer">
+                    <PulseLoader
+                      size={5}
+                      aria-label="Loading Spinner"
+                      data-testid="loader"
+                      color={loaderColor}
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className="highlight-unique cursor-pointer"
+                    onClick={handleOrder}
+                  >
+                    Buy
+                  </div>
+                )}
               </div>
             )}
           </div>

@@ -6,6 +6,7 @@ import ProfileIcon from "../assets/icons/profileIcon";
 import axiosInstance from "../configuration/axios";
 import { io } from "socket.io-client";
 import { ToastContainer, toast } from "react-toastify";
+import { PulseLoader } from "react-spinners";
 
 function FoodDetails() {
   const id = useParams();
@@ -18,6 +19,11 @@ function FoodDetails() {
     quantity: "",
   });
   const [isItemInCart, setIsItemInCart] = useState(false);
+  const [cartBtnClicked, setCartBtnClicked] = useState(false);
+
+  const loaderColor = getComputedStyle(document.documentElement)
+    .getPropertyValue("--loader-color")
+    .trim();
 
   const socket = io(import.meta.env.VITE_BACKEND_URL);
   useEffect(() => {
@@ -116,6 +122,7 @@ function FoodDetails() {
   }, []);
 
   async function addToCart(id, category_id) {
+    setCartBtnClicked(true);
     try {
       const response = await axiosInstance.post("/api/add-to-cart", {
         food_id: id,
@@ -127,12 +134,15 @@ function FoodDetails() {
         toast.success(String(response.data.message));
         setIsItemInCart(true);
       }
+      setCartBtnClicked(false);
     } catch (err) {
+      setCartBtnClicked(false);
       toast.error(String(err.message));
     }
   }
 
   async function removeFromCart(id) {
+    setCartBtnClicked(true);
     try {
       const response = await axiosInstance.delete("/api/delete-item-in-cart", {
         data: {
@@ -144,7 +154,9 @@ function FoodDetails() {
         toast.success(String(response.data.message));
         setIsItemInCart(false);
       }
+      setCartBtnClicked(false);
     } catch (err) {
+      setCartBtnClicked(false);
       toast.error(String(err.message));
     }
   }
@@ -199,16 +211,27 @@ function FoodDetails() {
               </div>
             )}
             <div className="highlight-normal">Price: {value.rate}</div>
-            <div
-              className="highlight-normal cursor-pointer"
-              onClick={() => {
-                isItemInCart
-                  ? removeFromCart(value.id)
-                  : addToCart(value.id, value.category_id);
-              }}
-            >
-              {isItemInCart ? "Remove from cart" : "Add to cart"}
-            </div>
+            {cartBtnClicked === true ? (
+              <div className="highlight-normal cursor-pointer">
+                <PulseLoader
+                  size={5}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                  color={loaderColor}
+                />
+              </div>
+            ) : (
+              <div
+                className="highlight-normal cursor-pointer"
+                onClick={() => {
+                  isItemInCart
+                    ? removeFromCart(value.id)
+                    : addToCart(value.id, value.category_id);
+                }}
+              >
+                {isItemInCart ? "Remove from cart" : "Add to cart"}
+              </div>
+            )}
             <div
               className="highlight-unique cursor-pointer"
               onClick={handleBuying}
