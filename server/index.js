@@ -67,9 +67,6 @@ const io = new Server(server, {
       process.env.ADMIN_APP_URL,
       process.env.COUNTER_APP_URL,
       process.env.FRONTEND_URL,
-      "http://localhost:3001",
-      "http://localhost:3002",
-      "http://localhost:3003",
     ],
   },
 });
@@ -79,9 +76,6 @@ const corsOptions = {
     process.env.ADMIN_APP_URL,
     process.env.COUNTER_APP_URL,
     process.env.FRONTEND_URL,
-    "http://localhost:3001",
-    "http://localhost:3002",
-    "http://localhost:3003",
   ],
   credentials: true,
 };
