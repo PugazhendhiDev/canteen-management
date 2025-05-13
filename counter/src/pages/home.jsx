@@ -22,7 +22,6 @@ function Home() {
 
         if (!decryptedText) throw new Error("Invalid or corrupted QR");
 
-        console.log("Decrypted:", decryptedText);
         setScannedText(decryptedText);
 
         scanner.clear().then(() => {
@@ -30,9 +29,8 @@ function Home() {
           navigate(`/order-page/${decryptedText}`);
         });
       } catch (err) {
-        console.error("Decryption Error:", err);
         scanner.clear().then(() => setShowScanner(false));
-        alert("Invalid or corrupted QR code.");
+        toast.error("Invalid or corrupted QR code.");
       }
     },
     [navigate]
@@ -47,14 +45,14 @@ function Home() {
       scanner.render(
         (decodedText) => handleScanSuccess(decodedText, scanner),
         (error) => {
-          console.warn("Scan error:", error);
+          toast.error("Scan error:", error);
         }
       );
     }
 
     return () => {
       if (scanner)
-        scanner.clear().catch((err) => console.error("Clear error", err));
+        scanner.clear().catch((err) => toast.error("Clear error", err));
     };
   }, [showScanner, handleScanSuccess]);
 
@@ -81,6 +79,7 @@ function Home() {
 
       <div className="page-container">
         <div className="page-body">
+          <h2>Counter</h2>
           <div className="qr-wrapper">
             <div className="qr">
               {showScanner ? (

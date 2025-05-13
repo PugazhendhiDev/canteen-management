@@ -57,6 +57,14 @@ function Login() {
 
             if (response.status === 200) {
               navigate("/", { replace: true });
+            } else {
+              await signOut(auth);
+              toast.error(String(err.response?.data?.message || err.message));
+              setIsSubmit(false);
+              setValue({
+                email: "",
+                password: "",
+              });
             }
           } catch (err) {
             await signOut(auth);

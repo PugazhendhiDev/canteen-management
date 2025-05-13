@@ -5,6 +5,7 @@ import Logo from "../assets/logo.jpeg";
 import ProfileIcon from "../assets/icons/profileIcon";
 import axiosInstance from "../configuration/axios";
 import { ToastContainer, toast } from "react-toastify";
+import { PulseLoader } from "react-spinners";
 
 function OrderPage() {
   const [value, setValue] = useState([]);
@@ -61,9 +62,14 @@ function OrderPage() {
       </div>
       <div className="page-container">
         <div className="page-body">
+          <h2>Counter</h2>
           <h2>Order History</h2>
           <div className="text-center">
-            {[...value].reverse().map((order, index) => (
+            {value.length === 0 ? <PulseLoader
+              size={10}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            /> : <>{[...value].reverse().map((order, index) => (
               <div key={index}>
                 <h3>Order #{value.length - index}</h3>
                 <ul>
@@ -84,7 +90,8 @@ function OrderPage() {
                 </div>
                 <hr></hr>
               </div>
-            ))}
+            ))}</>
+            }
           </div>
         </div>
       </div>

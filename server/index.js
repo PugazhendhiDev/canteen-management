@@ -36,6 +36,7 @@ const AddToCart = require("./routes/userDetails/addToCart");
 const QuantityUpdate = require("./routes/userDetails/quantityUpdate");
 const GetQuantityOfSpecificFood = require("./routes/userDetails/getQuantityofSpecificFood");
 const DeleteCartItem = require("./routes/userDetails/deleteCartItem");
+const ShopLogin = require("./routes/shopAuth/shopLogin");
 const Order = require("./routes/orders/order");
 const GetOrderHistory = require("./routes/orders/getOrderHistory");
 const GetUserOrder = require("./routes/orders/getUserOrder");
@@ -60,8 +61,11 @@ const io = new Server(server, {
   cors: {
     origin: [
       process.env.ADMIN_APP_URL,
+      process.env.COUNTER_APP_URL,
       process.env.FRONTEND_URL,
-      "http://192.168.21.152:5000",
+      "http://localhost:3001",
+      "http://localhost:3002",
+      "http://localhost:3003",
     ],
   },
 });
@@ -69,9 +73,11 @@ const io = new Server(server, {
 const corsOptions = {
   origin: [
     process.env.ADMIN_APP_URL,
+    process.env.COUNTER_APP_URL,
     process.env.FRONTEND_URL,
-    "http://192.168.21.152:5000",
-    "http://localhost:5173",
+    "http://localhost:3001",
+    "http://localhost:3002",
+    "http://localhost:3003",
   ],
   credentials: true,
 };
@@ -187,6 +193,41 @@ const authenticateAdminEmail = async (req, res, next) => {
   } catch (error) {
     res.status(500).json({
       message: "Error verifing admin",
+      error: error.message,
+    });
+  }
+};
+
+const authenticateCounterEmail = async (req, res, next) => {
+  try {
+    if (!req.email || !req.uid) {
+      return res.status(400).json({ error: "Missing email or uid" });
+    }
+
+    const { data, error } = await supabase
+      .from("shop_accounts")
+      .select("*")
+      .eq("email", req.email)
+      .eq("uid", req.uid)
+      .single();
+
+    if (error && error.code !== "PGRST116") {
+      return res.status(500).json({ error: error.message });
+    }
+
+    if (data) {
+      next();
+    } else {
+      if (error && error.code === "PGRST116") {
+        return res.status(500).json({
+          message: "Use counter account",
+          error: error.message,
+        });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: "Error verifing counter",
       error: error.message,
     });
   }
@@ -325,14 +366,18 @@ app.delete(
 app.get("/api/get-order-history", authenticateToken, GetOrderHistory(supabase));
 app.post("/api/order", authenticateToken, Order(supabase));
 
+app.get("/api/counter/login", authenticateToken, ShopLogin(supabase));
+
 app.get(
   "/api/get-user-order/:id",
   authenticateToken,
+  authenticateCounterEmail,
   GetUserOrder(supabase)
 );
 app.put(
   "/api/update-delivery-status",
   authenticateToken,
+  authenticateCounterEmail,
   UpdateDeliveryStatus(supabase)
 );
 
@@ -358,7 +403,7 @@ supabase
   )
   .subscribe();
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on http://0.0.0.0:${PORT}`);

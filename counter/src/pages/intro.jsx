@@ -8,6 +8,7 @@ function Intro() {
     <div className="page-wrapper page-wrapper-custom intro-page-animation">
       <div className="page-container page-container-custom">
         <div className="page-body gap-20">
+          <h2>Counter</h2>
           <div className="page-logo">
             <img src={Logo} />
           </div>

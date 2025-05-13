@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../configuration/firebase";
 import { signInWithEmailAndPassword, signOut, sendEmailVerification } from "firebase/auth";
+import axiosInstance from "../configuration/axios";
 import Logo from "../assets/logo.jpeg";
 import { ToastContainer, toast } from "react-toastify";
 import PulseLoader from "react-spinners/PulseLoader";
@@ -44,11 +45,36 @@ function Login() {
         });
         return;
       } else {
-        navigate("/", { replace: true });
+        if (user.emailVerified) {
+          try {
+            const response = await axiosInstance.get("/api/counter/login");
+
+            if (response.status === 200) {
+              navigate("/", { replace: true });
+            } else {
+              await signOut(auth);
+              toast.error(String(err.response?.data?.message || err.message));
+              setIsSubmit(false);
+              setValue({
+                email: "",
+                password: "",
+              });
+            }
+          } catch (err) {
+            await signOut(auth);
+            toast.error(String(err.response?.data?.message || err.message));
+            setIsSubmit(false);
+            setValue({
+              email: "",
+              password: "",
+            });
+          }
+        }
       }
 
       setIsSubmit(false);
     } catch (err) {
+      await signOut(auth);
       toast.error(String(err.message));
       setIsSubmit(false);
     }
