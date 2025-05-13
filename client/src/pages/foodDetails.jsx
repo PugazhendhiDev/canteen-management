@@ -205,7 +205,7 @@ function FoodDetails() {
           <h2>{value.name}</h2>
           <p>{value.description}</p>
           <div className="highlight-container">
-            {value.quantity && (
+            {value.quantity >= 0 && (
               <div className="highlight-normal">
                 Available: {value.quantity}
               </div>

@@ -86,7 +86,6 @@ function BuyingPage() {
     } catch (err) {
       setBuy(false);
       toast.error(String(err.response.data.error) || "Failed to place order");
-      console.error(err);
     }
   };
 
