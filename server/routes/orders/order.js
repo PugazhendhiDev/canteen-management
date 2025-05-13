@@ -14,6 +14,28 @@ function Order(supabase) {
         return res.status(400).json({ error: "Invalid or empty order items." });
       }
 
+      for (const item of displayItems) {
+        const { id, quantity } = item;
+
+        const { data: foodData, error: fetchError } = await supabase
+          .from("food_list")
+          .select("quantity, name")
+          .eq("id", id)
+          .single();
+
+        if (fetchError || !foodData) {
+          return res
+            .status(400)
+            .json({ error: `Failed to fetch food item with ID ${id}` });
+        }
+
+        if (foodData.quantity < quantity) {
+          return res.status(400).json({
+            error: `Insufficient stock for '${foodData.name}'. Only ${foodData.quantity} left.`,
+          });
+        }
+      }
+
       const { data: orderData, error: orderError } = await supabase
         .from("orders")
         .insert([
@@ -35,20 +57,21 @@ function Order(supabase) {
         .eq("uid", req.uid);
 
       if (cartDeleteError) {
-        return res.status(500).json({ error: "Order placed, but failed to clear cart" });
+        return res
+          .status(500)
+          .json({ error: "Order placed, but failed to clear cart" });
       }
 
       for (const item of displayItems) {
         const { id, quantity } = item;
 
-        const { error: updateError } = await supabase.rpc("decrease_food_quantity", {
-          food_id: id,
-          quantity_to_subtract: quantity,
-        });
-
-        if (updateError) {
-          console.error(`Failed to update quantity for food ID ${id}:`, updateError);
-        }
+        const { error: updateError } = await supabase.rpc(
+          "decrease_food_quantity",
+          {
+            food_id: id,
+            quantity_to_subtract: quantity,
+          }
+        );
       }
 
       res.status(201).json({
