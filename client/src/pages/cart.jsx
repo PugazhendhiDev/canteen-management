@@ -44,10 +44,6 @@ function Cart() {
               data: { food_id },
             }
           );
-
-          if (response) {
-            toast.success(String(response.data.message));
-          }
         } catch (err) {
           toast.error("Failed to remove item");
         }
@@ -66,10 +62,6 @@ function Cart() {
         quantity: newQuantity,
         updateMethod,
       });
-
-      if (response) {
-        toast.success("Quantity updated");
-      }
     } catch (err) {
       toast.error("Error updating cart");
     }
@@ -107,7 +99,11 @@ function Cart() {
                   className="page-card"
                   to={`/food-details/${value.food_categories.id}/${value.food_list.id}`}
                 >
-                  <img src={value.food_list.image_link} loading="lazy" />
+                  <img
+                    className="page-card-img"
+                    src={value.food_list.image_link}
+                    loading="lazy"
+                  />
                   <p>
                     {value.food_list.name.length > 20
                       ? `${value.food_list.name.slice(0, 20)}...`
