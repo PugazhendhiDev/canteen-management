@@ -6,16 +6,13 @@ import ProfileIcon from "../assets/icons/profileIcon";
 import axiosInstance from "../configuration/axios";
 import { ToastContainer, toast } from "react-toastify";
 import PulseLoader from "react-spinners/PulseLoader";
-import DeleteIcon from "../assets/icons/deleteIcon";
 
-function EditCategory() {
+function EditUserWallet() {
   const id = useParams();
   const [value, setValue] = useState({
-    category: "",
-    image_link: "",
+    amount: "",
   });
   const [isSubmit, setIsSubmit] = useState(false);
-  const [deleted, setDeleted] = useState(false);
   const navigate = useNavigate();
 
   const loaderColor = getComputedStyle(document.documentElement)
@@ -27,64 +24,28 @@ function EditCategory() {
     setIsSubmit(true);
 
     try {
-      const response = await axiosInstance.put("/api/admin/update-category", {
-        id: id.id,
-        category: value.category,
-        image_link: value.image_link,
-      });
+      const response = await axiosInstance.put(
+        "/api/admin/update-user-wallet",
+        {
+          roll_no: id.id,
+          amount: value.amount,
+        }
+      );
 
       if (response) {
         setIsSubmit(true);
-        sessionStorage.removeItem("categories");
         navigate(-1);
       } else {
         setIsSubmit(false);
+        setValue({
+          amount: "",
+        });
       }
     } catch (err) {
       toast.error(String(err.message));
       setIsSubmit(false);
     }
   };
-
-  useEffect(() => {
-    async function fetchCategory() {
-      try {
-        const response = await axiosInstance.get(
-          `/api/admin/fetch-specific-category/${id.id}`
-        );
-        setValue(response.data.data);
-      } catch (err) {
-        console.error("Error fetching category detail", err);
-      }
-    }
-
-    if (sessionStorage.getItem("categories")) {
-      const data = JSON.parse(sessionStorage.getItem("categories"));
-      setValue(data.find((obj) => obj.id == id.id));
-    } else {
-      fetchCategory();
-    }
-  }, []);
-
-  async function handleDelete() {
-    setDeleted(true);
-    toast("Deleting...");
-    try {
-      const res = await axiosInstance.delete("/api/admin/delete-category", {
-        data: { id: id.id },
-      });
-
-      if (res) {
-        sessionStorage.removeItem("categories");
-        navigate(-1);
-      }
-
-      setDeleted(false);
-    } catch (err) {
-      setDeleted(false);
-      toast.error(err.response?.data?.error || "Something went wrong!");
-    }
-  }
 
   return (
     <div className="page-wrapper">
@@ -113,28 +74,14 @@ function EditCategory() {
               <div className="form-body">
                 <input
                   className="form-input"
-                  placeholder="category name"
+                  placeholder="Enter an amount"
                   type="text"
-                  name="category"
-                  value={value.category}
+                  name="amount"
+                  value={value.amount}
                   onChange={(e) =>
                     setValue({
                       ...value,
-                      category: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <input
-                  className="form-input"
-                  placeholder="Image link"
-                  type="text"
-                  name="image_link"
-                  value={value.image_link}
-                  onChange={(e) =>
-                    setValue({
-                      ...value,
-                      image_link: e.target.value,
+                      amount: e.target.value,
                     })
                   }
                   required
@@ -145,19 +92,9 @@ function EditCategory() {
                   </button>
                 ) : (
                   <button className="form-button" type="submit">
-                    Edit Category
+                    Submit
                   </button>
                 )}
-                <div className="page-center">
-                  <div
-                    className="page-btn btn-20w-20h delete-btn"
-                    onClick={() => {
-                      if (!deleted) handleDelete();
-                    }}
-                  >
-                    <DeleteIcon />
-                  </div>
-                </div>
               </div>
             </form>
           ) : (
@@ -172,4 +109,4 @@ function EditCategory() {
   );
 }
 
-export default EditCategory;
+export default EditUserWallet;

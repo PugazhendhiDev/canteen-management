@@ -14,12 +14,14 @@ function Order(supabase) {
         return res.status(400).json({ error: "Invalid or empty order items." });
       }
 
+      let totalCost = 0;
+
       for (const item of displayItems) {
         const { id, quantity } = item;
 
         const { data: foodData, error: fetchError } = await supabase
           .from("food_list")
-          .select("quantity, name")
+          .select("quantity, name, rate")
           .eq("id", id)
           .single();
 
@@ -34,6 +36,34 @@ function Order(supabase) {
             error: `Insufficient stock for '${foodData.name}'. Only ${foodData.quantity} left.`,
           });
         }
+
+        totalCost += foodData.rate * quantity;
+      }
+
+      const { data: userData, error: userError } = await supabase
+        .from("user_data")
+        .select("amount")
+        .eq("uid", req.uid)
+        .single();
+
+      if (userError || !userData) {
+        return res.status(400).json({ error: "Failed to fetch user wallet." });
+      }
+
+      if (userData.amount < totalCost) {
+        return res.status(400).json({
+          error: `Insufficient wallet balance. Total: ₹${totalCost}, Available: ₹${userData.amount}`,
+        });
+      }
+
+      const newAmount = userData.amount - totalCost;
+      const { error: walletError } = await supabase
+        .from("user_data")
+        .update({ amount: newAmount })
+        .eq("uid", req.uid);
+
+      if (walletError) {
+        return res.status(500).json({ error: "Failed to update wallet." });
       }
 
       const { data: orderData, error: orderError } = await supabase
@@ -64,21 +94,18 @@ function Order(supabase) {
 
       for (const item of displayItems) {
         const { id, quantity } = item;
-
-        const { error: updateError } = await supabase.rpc(
-          "decrease_food_quantity",
-          {
-            food_id: id,
-            quantity_to_subtract: quantity,
-          }
-        );
+        await supabase.rpc("decrease_food_quantity", {
+          food_id: id,
+          quantity_to_subtract: quantity,
+        });
       }
 
       res.status(201).json({
-        message: "Order placed successfully",
+        message: "Order placed successfully. ₹" + totalCost + " deducted.",
         order: orderData[0],
       });
     } catch (error) {
+      console.error("Order error:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   });

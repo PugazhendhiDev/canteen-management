@@ -12,7 +12,7 @@ function ProfilePage() {
 
   useEffect(() => {
     const storedUserData = sessionStorage.getItem("userData");
-    
+
     if (storedUserData) {
       setUserData(JSON.parse(storedUserData));
     } else {
@@ -60,6 +60,7 @@ function ProfilePage() {
             <EditIcon />
           </Link>
           <h2>{userData.name || "Name"}</h2>
+          <h2>₹{userData.amount || "Amount"}</h2>
           <p>{userData.roll_no || "Roll no"}</p>
           <p>Department: {userData.dept || "Department"}</p>
           <p>Section: {userData.section || "Section"}</p>

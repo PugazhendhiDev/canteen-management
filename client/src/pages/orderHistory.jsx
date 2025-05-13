@@ -8,10 +8,12 @@ import { ToastContainer, toast } from "react-toastify";
 import { auth } from "../configuration/firebase";
 import { QRCodeSVG } from "qrcode.react";
 import CryptoJS from "crypto-js";
+import DeleteIcon from "../assets/icons/deleteIcon";
 
 function OrderHistory() {
   const [value, setValue] = useState([]);
   const [encryptedUID, setEncryptedUID] = useState(null);
+  const [deleted, setDeleted] = useState(false);
 
   useEffect(() => {
     async function fetchOrderHistory() {
@@ -37,6 +39,27 @@ function OrderHistory() {
 
     fetchOrderHistory();
   }, []);
+
+  async function handleDelete(orderId) {
+    setDeleted(true);
+    toast("Deleting...");
+    try {
+      const res = await axiosInstance.delete("/api/delete-order", {
+        data: { id: orderId },
+      });
+
+      if (res) {
+        setValue((prevOrders) =>
+          prevOrders.filter((order) => order.id !== orderId)
+        );
+      }
+
+      setDeleted(false);
+    } catch (err) {
+      setDeleted(false);
+      toast.error(err.response?.data?.error || "Something went wrong!");
+    }
+  }
 
   return (
     <div className="page-wrapper">
@@ -71,6 +94,18 @@ function OrderHistory() {
                   ))}
                 </ul>
                 <h3>{order.isDelivered ? "Received" : "Not Received"}</h3>
+                {order.isDelivered === false && (
+                  <div className="page-center">
+                    <div
+                      className="page-btn btn-20w-20h delete-btn"
+                      onClick={() => {
+                        if (!deleted) handleDelete(order.id);
+                      }}
+                    >
+                      <DeleteIcon />
+                    </div>
+                  </div>
+                )}
                 <hr></hr>
               </div>
             ))}

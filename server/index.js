@@ -18,6 +18,7 @@ const FetchAccounts = require("./routes/accountManagement/fetchAccounts");
 const FetchSpecificAccount = require("./routes/accountManagement/fetchSpecificAccount");
 const UpdateAccount = require("./routes/accountManagement/updateAccount");
 const DeleteAccount = require("./routes/accountManagement/deleteAccount");
+const UpdateUserWallet = require("./routes/userDetails/updateUserWallet");
 const AdminAccountCreation = require("./routes/adminAuth/adminAccountCreation");
 const AdminLogin = require("./routes/adminAuth/adminLogin");
 const CreateCategory = require("./routes/food/category/createCategory");
@@ -41,6 +42,7 @@ const Order = require("./routes/orders/order");
 const GetOrderHistory = require("./routes/orders/getOrderHistory");
 const GetUserOrder = require("./routes/orders/getUserOrder");
 const UpdateDeliveryStatus = require("./routes/orders/updateDeliveryStatus");
+const DeleteOrder = require("./routes/orders/deleteOrder");
 
 dotenv.config();
 
@@ -339,6 +341,12 @@ app.delete(
   authenticateAdminEmail,
   DeleteFood(supabase)
 );
+app.put(
+  "/api/admin/update-user-wallet",
+  authenticateToken,
+  authenticateAdminEmail,
+  UpdateUserWallet(supabase)
+);
 
 //batch list
 app.get("/api/get-batch-list", authenticateToken, GetBatchList(supabase));
@@ -380,6 +388,8 @@ app.put(
   authenticateCounterEmail,
   UpdateDeliveryStatus(supabase)
 );
+
+app.delete("/api/delete-order", authenticateToken, DeleteOrder(supabase));
 
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);

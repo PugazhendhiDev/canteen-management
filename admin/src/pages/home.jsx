@@ -6,6 +6,7 @@ import ProfileIcon from "../assets/icons/profileIcon";
 import AccountCreationIcon from "../assets/card/accountCreationIcon";
 import AccountManagementIcon from "../assets/card/accountManagementIcon";
 import FoodManagementIcon from "../assets/card/foodManagementIcon";
+import UserQrScannerIcon from "../assets/card/userQrScannerIcon";
 
 function Home() {
   return (
@@ -45,6 +46,13 @@ function Home() {
                 <FoodManagementIcon />
               </div>
               <p>Food Management</p>
+            </Link>
+
+            <Link className="page-card" to="/user-qr-scanner">
+              <div className="page-card-img">
+                <UserQrScannerIcon />
+              </div>
+              <p>User Qr Scanner</p>
             </Link>
           </div>
         </div>

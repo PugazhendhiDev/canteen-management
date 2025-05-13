@@ -6,7 +6,7 @@ function GetOrderHistory(supabase) {
     try {
       const { data, error } = await supabase
         .from("orders")
-        .select("food, isDelivered")
+        .select("id, food, isDelivered")
         .eq("uid", req.uid);
 
       if (error) return res.status(500).json({ error: error.message });

@@ -23,6 +23,8 @@ import ManageFoodItems from "./pages/manageFoodItems";
 import CreateFood from "./pages/createFood";
 import EditFood from "./pages/editFood";
 import FoodDetails from "./pages/foodDetails";
+import UserQrScanner from "./pages/userQRScanner";
+import EditUserWallet from "./pages/editUserWallet";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -244,6 +246,27 @@ function App() {
         element={
           user && user.emailVerified ? (
             <EditFood />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+      <Route
+        path="/user-qr-scanner"
+        element={
+          user && user.emailVerified ? (
+            <UserQrScanner />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+
+      <Route
+        path="/edit-user-wallet/:id"
+        element={
+          user && user.emailVerified ? (
+            <EditUserWallet />
           ) : (
             <Navigate to="/" replace />
           )
